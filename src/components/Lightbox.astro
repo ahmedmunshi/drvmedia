@@ -82,7 +82,6 @@ const { images } = Astro.props;
   // Import Cloudinary utility (we'll need to make this available in the client)
   function buildCloudinaryUrl(publicId, options = {}) {
     const cloudName = 'dqrj6xsjs'; // Your cloud name
-    const folder = 'portfolio';
     const {
       width,
       height,
@@ -90,7 +89,8 @@ const { images } = Astro.props;
       format = 'auto',
       crop = 'fill',
       gravity = 'auto',
-      dpr = 'auto'
+      dpr = 'auto',
+      blur
     } = options;
 
     let transformations = [];
@@ -98,6 +98,10 @@ const { images } = Astro.props;
     transformations.push(`q_${quality}`);
     transformations.push(`f_${format}`);
     transformations.push(`dpr_${dpr}`);
+    
+    if (blur) {
+      transformations.push(`e_blur:${blur}`);
+    }
     
     if (width || height) {
       let sizeTransform = '';
@@ -111,11 +115,8 @@ const { images } = Astro.props;
     const baseUrl = `https://res.cloudinary.com/${cloudName}/image/upload`;
     const transformString = transformations.join(',');
     
-    const cleanPublicId = publicId.startsWith(folder) 
-      ? publicId 
-      : `${folder}/${publicId}`;
-      
-    return `${baseUrl}/${transformString}/${cleanPublicId}`;
+    // Images are uploaded directly to root, not in a folder
+    return `${baseUrl}/${transformString}/${publicId}`;
   }
 
   let currentImageIndex = 0;
@@ -147,20 +148,44 @@ const { images } = Astro.props;
     // Show loading state
     showLoading();
     
-    // Update image with high-quality Cloudinary URL
-    image.onload = () => {
-      hideLoading();
-    };
-    
-    // Generate high-quality image URL for lightbox
-    const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
-      width: 2048,
-      quality: 85,
-      format: 'auto'
+    // First load a low-quality placeholder for instant feedback
+    const placeholderSrc = buildCloudinaryUrl(currentImage.src, {
+      width: 50,
+      quality: 30,
+      format: 'auto',
+      blur: 15
     });
     
-    image.src = lightboxImageSrc;
+    // Generate optimized image URL for lightbox based on screen size
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1400); // Cap at 1400px
+    const maxHeight = Math.min(screenHeight * window.devicePixelRatio, 900); // Cap at 900px
+    
+    const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
+      width: Math.floor(maxWidth),
+      height: Math.floor(maxHeight),
+      quality: 'auto:good',
+      format: 'auto',
+      crop: 'fit' // Maintain aspect ratio
+    });
+    
+    // Show placeholder first
+    image.src = placeholderSrc;
     image.alt = currentImage.alt;
+    image.style.filter = 'blur(5px)';
+    
+    // Then load the high-quality image
+    const highQualityImg = new Image();
+    highQualityImg.onload = () => {
+      image.src = lightboxImageSrc;
+      image.style.filter = 'none';
+      hideLoading();
+    };
+    highQualityImg.onerror = () => {
+      hideLoading();
+    };
+    highQualityImg.src = lightboxImageSrc;
     
     // Update title
     const titleP = title.querySelector('p');
@@ -213,19 +238,44 @@ const { images } = Astro.props;
     // Show loading state
     showLoading();
     
-    // Update image with high-quality Cloudinary URL
-    image.onload = () => {
-      hideLoading();
-    };
-    
-    const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
-      width: 2048,
-      quality: 85,
-      format: 'auto'
+    // First load a low-quality placeholder for instant feedback
+    const placeholderSrc = buildCloudinaryUrl(currentImage.src, {
+      width: 50,
+      quality: 30,
+      format: 'auto',
+      blur: 15
     });
     
-    image.src = lightboxImageSrc;
+    // Generate optimized image URL for lightbox based on screen size
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1400); // Cap at 1400px
+    const maxHeight = Math.min(screenHeight * window.devicePixelRatio, 900); // Cap at 900px
+    
+    const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
+      width: Math.floor(maxWidth),
+      height: Math.floor(maxHeight),
+      quality: 'auto:good',
+      format: 'auto',
+      crop: 'fit' // Maintain aspect ratio
+    });
+    
+    // Show placeholder first
+    image.src = placeholderSrc;
     image.alt = currentImage.alt;
+    image.style.filter = 'blur(5px)';
+    
+    // Then load the high-quality image
+    const highQualityImg = new Image();
+    highQualityImg.onload = () => {
+      image.src = lightboxImageSrc;
+      image.style.filter = 'none';
+      hideLoading();
+    };
+    highQualityImg.onerror = () => {
+      hideLoading();
+    };
+    highQualityImg.src = lightboxImageSrc;
     
     // Update title
     const titleP = title.querySelector('p');

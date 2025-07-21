@@ -116,15 +116,12 @@ const portfolioImages = cloudinaryGalleryImages;
     function buildCloudinaryUrl(publicId, options = {}) {
       const baseUrl = 'https://res.cloudinary.com/dqrj6xsjs/image/upload';
       
-      // Enhanced transformations for better performance
+      // Simplified transformations for testing
       const transformations = [
-        'f_auto', // Auto format (WebP, AVIF when supported)
-        'q_auto:good', // Good quality setting (faster than auto)
-        options.width ? `w_${options.width}` : 'w_800',
-        options.height ? `h_${options.height}` : null,
-        options.crop || 'c_fit',
-        'fl_progressive:steep' // Progressive JPEG for faster perceived loading
-      ].filter(Boolean).join(',');
+        'f_auto',
+        'q_auto',
+        options.width ? `w_${options.width}` : 'w_400'
+      ].join(',');
       
       return `${baseUrl}/${transformations}/${publicId}`;
     }
@@ -133,6 +130,9 @@ const portfolioImages = cloudinaryGalleryImages;
       const galleryContainer = document.getElementById('gallery-container');
       const portfolioHero = document.getElementById('portfolio-hero');
       const mobileNav = document.getElementById('mobile-nav');
+      
+      console.log('DOMContentLoaded - galleryContainer:', galleryContainer);
+      console.log('portfolioImages available:', typeof portfolioImages !== 'undefined', portfolioImages?.length);
       
       // EDIT THESE PIXEL VALUES TO CONTROL FADE BEHAVIOR
       const FADE_START_PIXEL = 5; // Change this number to adjust when fade begins
@@ -194,12 +194,16 @@ const portfolioImages = cloudinaryGalleryImages;
       }
       
       function displayImages() {
+        console.log('displayImages called, portfolioImages length:', portfolioImages.length);
+        console.log('First image:', portfolioImages[0]);
+        
         // Create new ImageGrid HTML using optimized Cloudinary URLs
         const gridHTML = `
-          <div class="columns-3 md:columns-3 lg:columns-4 xl:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
+          <div class="columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
             ${portfolioImages.map((image, index) => {
-              // Use smaller thumbnails for faster loading
-              const thumbnailUrl = buildCloudinaryUrl(image.src, { width: 300, crop: 'c_fill' });
+              // Use larger thumbnails to give landscape images more presence
+              const thumbnailUrl = buildCloudinaryUrl(image.src, { width: 400, quality: 'auto:good', crop: 'fit' });
+              console.log(`Image ${index}: ${image.src} -> ${thumbnailUrl}`);
               return `
                 <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] mb-3 md:mb-0">
                   <div class="relative bg-gray-100">
@@ -249,7 +253,7 @@ const portfolioImages = cloudinaryGalleryImages;
         preloadInitialImages();
       }
       
-      // Lightbox function with preloading
+      // Lightbox function with progressive loading
       function openLightbox(index) {
         const lightbox = document.getElementById('lightbox');
         const image = document.getElementById('lightbox-image');
@@ -258,7 +262,7 @@ const portfolioImages = cloudinaryGalleryImages;
         if (!lightbox || !image || !counter || !portfolioImages[index]) {
           return;
         }
-        
+
         currentImageIndex = index;
         
         // Show lightbox with proper z-index and prevent scrolling
@@ -267,19 +271,43 @@ const portfolioImages = cloudinaryGalleryImages;
         document.body.style.overflow = 'hidden';
         document.documentElement.style.overflow = 'hidden'; // Also prevent html scroll
         
-        // Load high-quality Cloudinary image for lightbox
         const currentImage = portfolioImages[index];
-        const lightboxUrl = buildCloudinaryUrl(currentImage.src, { width: 2048 });
         
-        // Add loading state
-        image.style.opacity = '0.3';
-        image.src = lightboxUrl;
+        // First load a low-quality placeholder for instant feedback
+        const placeholderUrl = buildCloudinaryUrl(currentImage.src, { 
+          width: 50,
+          quality: 30,
+          blur: 15
+        });
+        
+        // Load optimized Cloudinary image for lightbox based on screen size
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1400); // Cap at 1400px
+        const maxHeight = Math.min(screenHeight * window.devicePixelRatio, 900); // Cap at 900px
+        
+        const lightboxUrl = buildCloudinaryUrl(currentImage.src, { 
+          width: Math.floor(maxWidth),
+          height: Math.floor(maxHeight),
+          quality: 'auto:good',
+          format: 'auto',
+          crop: 'fit'
+        });
+        
+        // Show blurred placeholder first
+        image.src = placeholderUrl;
         image.alt = currentImage.alt;
+        image.style.opacity = '0.7';
+        image.style.filter = 'blur(5px)';
         
-        // Remove loading state when image loads
-        image.onload = function() {
+        // Then load the high-quality image
+        const highQualityImg = new Image();
+        highQualityImg.onload = function() {
+          image.src = lightboxUrl;
           image.style.opacity = '1';
+          image.style.filter = 'none';
         };
+        highQualityImg.src = lightboxUrl;
         
         // Update counter (removed title display)
         counter.textContent = `${index + 1} / ${portfolioImages.length}`;
@@ -292,9 +320,7 @@ const portfolioImages = cloudinaryGalleryImages;
         
         // Focus on lightbox for keyboard navigation
         lightbox.focus();
-      }
-      
-      // Add preloading function for smoother navigation
+      }      // Add preloading function for smoother navigation
       function preloadAdjacentImages(currentIndex) {
         const preloadIndices = [
           currentIndex - 1, // Previous image
@@ -303,7 +329,14 @@ const portfolioImages = cloudinaryGalleryImages;
         
         preloadIndices.forEach(index => {
           const img = new Image();
-          const preloadUrl = buildCloudinaryUrl(portfolioImages[index].src, { width: 2048 });
+          const screenWidth = window.innerWidth;
+          const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1200); // Smaller for preloading
+          const preloadUrl = buildCloudinaryUrl(portfolioImages[index].src, { 
+            width: Math.floor(maxWidth),
+            quality: 'auto:good',
+            format: 'auto',
+            crop: 'fit'
+          });
           img.src = preloadUrl;
         });
       }
@@ -311,10 +344,18 @@ const portfolioImages = cloudinaryGalleryImages;
       // Preload first few high-res images for immediate lightbox access
       function preloadInitialImages() {
         const firstFew = Math.min(3, portfolioImages.length);
+        const screenWidth = window.innerWidth;
+        const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1200); // Smaller for initial preloading
+        
         for (let i = 0; i < firstFew; i++) {
           setTimeout(() => {
             const img = new Image();
-            const preloadUrl = buildCloudinaryUrl(portfolioImages[i].src, { width: 2048 });
+            const preloadUrl = buildCloudinaryUrl(portfolioImages[i].src, { 
+              width: Math.floor(maxWidth),
+              quality: 'auto:good',
+              format: 'auto',
+              crop: 'fit'
+            });
             img.src = preloadUrl;
           }, i * 100); // Stagger preloading to avoid blocking
         }

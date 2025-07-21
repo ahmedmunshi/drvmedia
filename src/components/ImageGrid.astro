@@ -32,10 +32,9 @@ function getAspectClass(aspect?: 'tall' | 'wide' | 'square', index = 0) {
   {images.map((image, index) => {
     const { src, srcset } = buildResponsiveImageUrls(image.src);
     const thumbnailSrc = buildCloudinaryUrl(image.src, { 
-      width: 600, 
-      height: 400, 
-      crop: 'fill', 
-      quality: 'auto',
+      width: 400,  // Thumbnail size
+      crop: 'fit', // Preserve aspect ratio instead of cropping
+      quality: 'auto:good',
       format: 'auto'
     });
     
@@ -49,6 +48,7 @@ function getAspectClass(aspect?: 'tall' | 'wide' | 'square', index = 0) {
             alt={image.alt}
             class="gallery-thumbnail w-full h-auto object-cover transition-transform duration-300"
             loading="lazy"
+            decoding="async"
             data-index={index}
             data-full-src={src}
           />

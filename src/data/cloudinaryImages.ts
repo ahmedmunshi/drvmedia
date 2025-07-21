@@ -2,6 +2,19 @@
 // Using Cloudinary public IDs from API response
 
 export const cloudinaryGalleryImages = [
+  // Featured images - moved to top
+  {
+    src: 'IMG_4499_ybrv5h',
+    alt: 'Automotive shot 4499',
+    title: 'Auto 4499',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5296_myeilm',
+    alt: 'Automotive shot 5296',
+    title: 'Auto 5296',
+    category: 'automotive'
+  },
   // Automotive Photography
   {
     src: 'rwb-green_sjk4ft',
@@ -250,12 +263,6 @@ export const cloudinaryGalleryImages = [
     category: 'automotive'
   },
   {
-    src: 'IMG_4499_ybrv5h',
-    alt: 'Automotive shot 4499',
-    title: 'Auto 4499',
-    category: 'automotive'
-  },
-  {
     src: 'IMG_4517_mvj2ex',
     alt: 'Automotive shot 4517',
     title: 'Auto 4517',
@@ -271,12 +278,6 @@ export const cloudinaryGalleryImages = [
     src: 'IMG_4622_djpowf',
     alt: 'Automotive shot 4622',
     title: 'Auto 4622',
-    category: 'automotive'
-  },
-  {
-    src: 'IMG_5296_myeilm',
-    alt: 'Automotive shot 5296',
-    title: 'Auto 5296',
     category: 'automotive'
   },
   {

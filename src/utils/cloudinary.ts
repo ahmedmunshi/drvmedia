@@ -16,9 +16,10 @@ export interface CloudinaryOptions {
   width?: number
   height?: number
   crop?: string
-  quality?: 'auto' | 'auto:good' | 'auto:best' | number
+  quality?: 'auto' | 'auto:good' | 'auto:best' | 'auto:low' | number
   format?: 'auto' | 'webp' | 'avif' | 'jpg' | 'png'
   progressive?: boolean
+  blur?: number
 }
 
 /**
@@ -43,8 +44,11 @@ export function buildCloudinaryUrl(
     options.height ? `h_${options.height}` : null,
     options.crop ? `c_${options.crop}` : 'c_fit',
     options.progressive ? 'fl_progressive:steep' : null,
+    options.blur ? `e_blur:${options.blur}` : null,
+    'dpr_auto' // Auto device pixel ratio for retina displays
   ].filter(Boolean).join(',')
   
+  // Images are uploaded directly to root, not in a folder
   return `${baseUrl}/${transformations}/${publicId}`
 }
 
@@ -54,14 +58,14 @@ export function buildCloudinaryUrl(
  * @returns {Object} - Object with src and srcset
  */
 export function buildResponsiveImageUrls(publicId: string) {
-  const sizes = [400, 800, 1200, 1600, 2000];
+  const sizes = [400, 600, 900, 1200]; // More conservative sizes
   
   const srcset = sizes
-    .map(width => `${buildCloudinaryUrl(publicId, { width, quality: 'auto', format: 'auto' })} ${width}w`)
+    .map(width => `${buildCloudinaryUrl(publicId, { width, quality: 'auto:good', format: 'auto' })} ${width}w`)
     .join(', ');
     
   return {
-    src: buildCloudinaryUrl(publicId, { width: 1200, quality: 'auto', format: 'auto' }),
+    src: buildCloudinaryUrl(publicId, { width: 800, quality: 'auto:good', format: 'auto' }),
     srcset
   };
 }
