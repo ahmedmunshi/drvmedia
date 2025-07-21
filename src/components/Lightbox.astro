@@ -1,0 +1,287 @@
+---
+export interface Props {
+  images: Array<{
+    src: string;
+    alt: string;
+    title?: string;
+  }>;
+}
+
+const { images } = Astro.props;
+---
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-95 hidden z-50 flex items-center justify-center">
+  <div class="relative w-full h-full flex items-center justify-center px-4 py-8">
+    <!-- Close button -->
+    <button 
+      id="lightbox-close"
+      class="absolute top-6 right-6 text-white hover:text-gray-300 z-20 p-3 bg-black bg-opacity-50 rounded-full transition-all duration-200 hover:bg-opacity-70"
+      aria-label="Close lightbox"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    
+    <!-- Previous button -->
+    <button 
+      id="lightbox-prev"
+      class="absolute left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-20 p-4 bg-black bg-opacity-50 rounded-full transition-all duration-200 hover:bg-opacity-70 hover:scale-110"
+      aria-label="Previous image"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+    
+    <!-- Next button -->
+    <button 
+      id="lightbox-next"
+      class="absolute right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-20 p-4 bg-black bg-opacity-50 rounded-full transition-all duration-200 hover:bg-opacity-70 hover:scale-110"
+      aria-label="Next image"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+    
+    <!-- Image container -->
+    <div class="relative max-w-full max-h-full flex items-center justify-center">
+      <img 
+        id="lightbox-image"
+        class="max-w-full max-h-full object-contain shadow-2xl"
+        src=""
+        alt=""
+        style="max-height: calc(100vh - 120px);"
+      />
+    </div>
+    
+    <!-- Image info -->
+    <div class="absolute bottom-6 left-6 right-6 text-white">
+      <div class="flex justify-between items-end">
+        <div id="lightbox-title" class="flex-1">
+          <p class="text-lg font-medium"></p>
+        </div>
+        <div class="ml-4">
+          <span id="lightbox-counter" class="text-sm bg-black bg-opacity-50 px-4 py-2 rounded-full"></span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Loading indicator -->
+    <div id="lightbox-loading" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ images }}>
+  let currentImageIndex = 0;
+  let isLightboxOpen = false;
+  
+  function showLoading() {
+    const loading = document.getElementById('lightbox-loading');
+    if (loading) loading.classList.remove('hidden');
+  }
+  
+  function hideLoading() {
+    const loading = document.getElementById('lightbox-loading');
+    if (loading) loading.classList.add('hidden');
+  }
+  
+  function openLightbox(index) {
+    const lightbox = document.getElementById('lightbox');
+    const image = document.getElementById('lightbox-image');
+    const title = document.getElementById('lightbox-title');
+    const counter = document.getElementById('lightbox-counter');
+    
+    if (!lightbox || !image || !title || !counter) return;
+    
+    currentImageIndex = index;
+    isLightboxOpen = true;
+    
+    const currentImage = images[currentImageIndex];
+    
+    // Show loading state
+    showLoading();
+    
+    // Update image
+    image.onload = () => {
+      hideLoading();
+    };
+    
+    image.src = currentImage.src;
+    image.alt = currentImage.alt;
+    
+    // Update title
+    const titleP = title.querySelector('p');
+    if (titleP) {
+      titleP.textContent = currentImage.title || currentImage.alt;
+    }
+    
+    // Update counter
+    counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+    
+    // Show lightbox
+    lightbox.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    // Focus management for accessibility
+    lightbox.focus();
+  }
+  
+  function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox && isLightboxOpen) {
+      lightbox.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+      isLightboxOpen = false;
+      hideLoading();
+    }
+  }
+  
+  function showPrevImage() {
+    if (!isLightboxOpen) return;
+    currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : images.length - 1;
+    updateLightboxImage();
+  }
+  
+  function showNextImage() {
+    if (!isLightboxOpen) return;
+    currentImageIndex = currentImageIndex < images.length - 1 ? currentImageIndex + 1 : 0;
+    updateLightboxImage();
+  }
+  
+  function updateLightboxImage() {
+    const image = document.getElementById('lightbox-image');
+    const title = document.getElementById('lightbox-title');
+    const counter = document.getElementById('lightbox-counter');
+    
+    if (!image || !title || !counter) return;
+    
+    const currentImage = images[currentImageIndex];
+    
+    // Show loading state
+    showLoading();
+    
+    // Update image
+    image.onload = () => {
+      hideLoading();
+    };
+    
+    image.src = currentImage.src;
+    image.alt = currentImage.alt;
+    
+    // Update title
+    const titleP = title.querySelector('p');
+    if (titleP) {
+      titleP.textContent = currentImage.title || currentImage.alt;
+    }
+    
+    // Update counter
+    counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+  }
+  
+  // Ensure DOM is loaded before attaching event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add a small delay to ensure all images are rendered
+    setTimeout(() => {
+      // Gallery thumbnails click handlers
+      const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+      console.log(`Found ${thumbnails.length} thumbnails`); // Debug log
+      
+      thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log(`Clicked thumbnail ${index}`); // Debug log
+          openLightbox(index);
+        });
+        
+        // Also handle clicks on parent container
+        const container = thumbnail.closest('.group');
+        if (container) {
+          container.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log(`Clicked container ${index}`); // Debug log
+            openLightbox(index);
+          });
+        }
+      });
+    }, 100);
+    
+    // Lightbox controls
+    const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+    const lightbox = document.getElementById('lightbox');
+    
+    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+    if (prevBtn) prevBtn.addEventListener('click', showPrevImage);
+    if (nextBtn) nextBtn.addEventListener('click', showNextImage);
+    
+    // Close on background click
+    if (lightbox) {
+      lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (isLightboxOpen) {
+        e.preventDefault();
+        switch(e.key) {
+          case 'Escape':
+            closeLightbox();
+            break;
+          case 'ArrowLeft':
+          case 'a':
+          case 'A':
+            showPrevImage();
+            break;
+          case 'ArrowRight':
+          case 'd':
+          case 'D':
+          case ' ':
+            showNextImage();
+            break;
+        }
+      }
+    });
+    
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    if (lightbox) {
+      lightbox.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+      
+      lightbox.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+    }
+    
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold && isLightboxOpen) {
+        if (diff > 0) {
+          // Swiped left - show next image
+          showNextImage();
+        } else {
+          // Swiped right - show previous image
+          showPrevImage();
+        }
+      }
+    }
+  });
+</script>
