@@ -1,7 +1,9 @@
 ---
+import { buildCloudinaryUrl } from '../utils/cloudinary';
+
 export interface Props {
   images: Array<{
-    src: string;
+    src: string; // This will now be the Cloudinary public ID
     alt: string;
     title?: string;
   }>;
@@ -77,6 +79,45 @@ const { images } = Astro.props;
 </div>
 
 <script define:vars={{ images }}>
+  // Import Cloudinary utility (we'll need to make this available in the client)
+  function buildCloudinaryUrl(publicId, options = {}) {
+    const cloudName = 'dqrj6xsjs'; // Your cloud name
+    const folder = 'portfolio';
+    const {
+      width,
+      height,
+      quality = 'auto',
+      format = 'auto',
+      crop = 'fill',
+      gravity = 'auto',
+      dpr = 'auto'
+    } = options;
+
+    let transformations = [];
+    
+    transformations.push(`q_${quality}`);
+    transformations.push(`f_${format}`);
+    transformations.push(`dpr_${dpr}`);
+    
+    if (width || height) {
+      let sizeTransform = '';
+      if (width) sizeTransform += `w_${width}`;
+      if (height) sizeTransform += `${width ? ',' : ''}h_${height}`;
+      sizeTransform += `,c_${crop}`;
+      if (gravity && crop === 'fill') sizeTransform += `,g_${gravity}`;
+      transformations.push(sizeTransform);
+    }
+
+    const baseUrl = `https://res.cloudinary.com/${cloudName}/image/upload`;
+    const transformString = transformations.join(',');
+    
+    const cleanPublicId = publicId.startsWith(folder) 
+      ? publicId 
+      : `${folder}/${publicId}`;
+      
+    return `${baseUrl}/${transformString}/${cleanPublicId}`;
+  }
+
   let currentImageIndex = 0;
   let isLightboxOpen = false;
   
@@ -106,12 +147,19 @@ const { images } = Astro.props;
     // Show loading state
     showLoading();
     
-    // Update image
+    // Update image with high-quality Cloudinary URL
     image.onload = () => {
       hideLoading();
     };
     
-    image.src = currentImage.src;
+    // Generate high-quality image URL for lightbox
+    const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
+      width: 2048,
+      quality: 85,
+      format: 'auto'
+    });
+    
+    image.src = lightboxImageSrc;
     image.alt = currentImage.alt;
     
     // Update title
@@ -165,12 +213,18 @@ const { images } = Astro.props;
     // Show loading state
     showLoading();
     
-    // Update image
+    // Update image with high-quality Cloudinary URL
     image.onload = () => {
       hideLoading();
     };
     
-    image.src = currentImage.src;
+    const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
+      width: 2048,
+      quality: 85,
+      format: 'auto'
+    });
+    
+    image.src = lightboxImageSrc;
     image.alt = currentImage.alt;
     
     // Update title
@@ -189,13 +243,11 @@ const { images } = Astro.props;
     setTimeout(() => {
       // Gallery thumbnails click handlers
       const thumbnails = document.querySelectorAll('.gallery-thumbnail');
-      console.log(`Found ${thumbnails.length} thumbnails`); // Debug log
       
       thumbnails.forEach((thumbnail, index) => {
         thumbnail.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log(`Clicked thumbnail ${index}`); // Debug log
           openLightbox(index);
         });
         
@@ -205,7 +257,6 @@ const { images } = Astro.props;
           container.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log(`Clicked container ${index}`); // Debug log
             openLightbox(index);
           });
         }

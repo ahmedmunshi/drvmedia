@@ -1,395 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import { cloudinaryGalleryImages } from '../data/cloudinaryImages';
 
-// All portfolio images - Automotive Photography Only
-const portfolioImages = [
-  // Automotive Photography
-  {
-    src: '/images/automotive/rwb-green.jpg',
-    alt: 'Green RWB Porsche side profile',
-    title: 'RWB Green',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/champagne-nsx.jpg',
-    alt: 'Champagne colored NSX',
-    title: 'Champagne NSX',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/white-rwb.jpg',
-    alt: 'White RWB Porsche',
-    title: 'White RWB',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/blue-cayman.jpg',
-    alt: 'Blue Porsche Cayman',
-    title: 'Blue Cayman',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/gt3rs-rimgold.jpg',
-    alt: 'GT3RS with gold rims detail',
-    title: 'GT3RS Gold Rims',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/black-nsx-ie.jpg',
-    alt: 'Black NSX detail shot',
-    title: 'Black NSX',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/green-nsx.jpg',
-    alt: 'Green NSX sports car',
-    title: 'Green NSX',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/red-gt3rswheel.jpg',
-    alt: 'Red GT3RS wheel detail',
-    title: 'GT3RS Wheel',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/rwb-wheel.jpg',
-    alt: 'RWB Porsche wheel detail',
-    title: 'RWB Wheel',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/closeup-porsche.jpg',
-    alt: 'Close-up Porsche detail',
-    title: 'Porsche Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/white-porsche.jpg',
-    alt: 'White Porsche sports car',
-    title: 'White Porsche',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/240sx-markham.jpg',
-    alt: '240SX in Markham',
-    title: '240SX Markham',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/air-audi.jpg',
-    alt: 'Audi with air suspension',
-    title: 'Air Audi',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/brz-ie.jpg',
-    alt: 'Subaru BRZ detail',
-    title: 'BRZ Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/s2k-1.jpg',
-    alt: 'Honda S2000 sports car',
-    title: 'S2000',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/supra-pink.jpg',
-    alt: 'Pink Toyota Supra',
-    title: 'Pink Supra',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/rear-3rs.jpg',
-    alt: 'GT3RS rear view',
-    title: 'GT3RS Rear',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/red-blackgt3rs.jpg',
-    alt: 'Red and black GT3RS',
-    title: 'Red Black GT3RS',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/rwb-olivedark.jpg',
-    alt: 'Dark olive RWB Porsche',
-    title: 'RWB Olive',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/wheel-1.jpg',
-    alt: 'Car wheel detail 1',
-    title: 'Wheel Detail 1',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/wheel-2.jpg',
-    alt: 'Car wheel detail 2',
-    title: 'Wheel Detail 2',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/wheel-3.jpg',
-    alt: 'Car wheel detail 3',
-    title: 'Wheel Detail 3',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/byg-3rs.jpg',
-    alt: 'GT3RS build details',
-    title: 'BYG GT3RS',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/car-1.jpg',
-    alt: 'Sports car photography',
-    title: 'Sports Car',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/champ-nsx2.jpg',
-    alt: 'Champion NSX variant',
-    title: 'Champion NSX',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/green-red.jpg',
-    alt: 'Green and red car details',
-    title: 'Green Red',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/hamsuplo-rear.jpg',
-    alt: 'Car rear detail shot',
-    title: 'Rear Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/porschelogo-aban.jpg',
-    alt: 'Porsche logo detail',
-    title: 'Porsche Logo',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/red-old.jpg',
-    alt: 'Classic red car',
-    title: 'Red Classic',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/redwhite-rs.jpg',
-    alt: 'Red and white RS',
-    title: 'Red White RS',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/rwb-rearq.jpg',
-    alt: 'RWB rear quarter panel',
-    title: 'RWB Rear',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/rwb-w2.jpg',
-    alt: 'RWB wide body detail',
-    title: 'RWB Wide',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/rwbn-redadamae.jpg',
-    alt: 'Red RWB Porsche',
-    title: 'Red RWB',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/sanjayrx.jpg',
-    alt: 'RX sports car',
-    title: 'Sanjay RX',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/tony-classics.jpg',
-    alt: 'Classic car collection',
-    title: 'Tony Classics',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/white-rwb0.jpg',
-    alt: 'White RWB variant',
-    title: 'White RWB Alt',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/white-rwb3q.jpg',
-    alt: 'White RWB three quarter view',
-    title: 'White RWB 3Q',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5296.jpg',
-    alt: 'Automotive photography scene',
-    title: 'Auto Scene',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5319.jpg',
-    alt: 'Car detail photography',
-    title: 'Car Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5352.jpg',
-    alt: 'Automotive capture',
-    title: 'Auto Capture',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5366.jpg',
-    alt: 'Car moment capture',
-    title: 'Car Moment',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5464.jpg',
-    alt: 'Car scene capture',
-    title: 'Car Scene',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5524.jpg',
-    alt: 'Car scene photography',
-    title: 'Car Frame',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_4308.JPG',
-    alt: 'Automotive detail shot',
-    title: 'Auto Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_4395.JPG',
-    alt: 'Car photography moment',
-    title: 'Car Moment',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_4398.JPG',
-    alt: 'Automotive scene',
-    title: 'Auto Scene',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_4414.jpg',
-    alt: 'Car detail capture',
-    title: 'Car Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_4499.jpg',
-    alt: 'Automotive photography',
-    title: 'Auto Photo',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_4517.jpg',
-    alt: 'Car scene shot',
-    title: 'Car Shot',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_4571.jpg',
-    alt: 'Automotive capture',
-    title: 'Auto Capture',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_4622.jpg',
-    alt: 'Car photography frame',
-    title: 'Car Frame',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5396.jpg',
-    alt: 'Automotive detail',
-    title: 'Auto Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5550.jpg',
-    alt: 'Automotive shot',
-    title: 'Auto Shot',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_5586.jpg',
-    alt: 'Car detail shot',
-    title: 'Car Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6097.jpg',
-    alt: 'Automotive photography',
-    title: 'Auto Photo',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6152.jpg',
-    alt: 'Car capture',
-    title: 'Car Capture',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6155-Enhanced-NR.jpg',
-    alt: 'Enhanced automotive shot',
-    title: 'Enhanced Auto',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6271.jpg',
-    alt: 'Automotive scene',
-    title: 'Auto Scene',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6327.jpg',
-    alt: 'Car photography',
-    title: 'Car Photo',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6508.jpg',
-    alt: 'Automotive detail',
-    title: 'Auto Detail',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6516.jpg',
-    alt: 'Car scene shot',
-    title: 'Car Shot',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6543.jpg',
-    alt: 'Automotive capture',
-    title: 'Auto Capture',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6543 2.jpg',
-    alt: 'Automotive variant shot',
-    title: 'Auto Variant',
-    category: 'automotive'
-  },
-  {
-    src: '/images/automotive/IMG_6547.jpg',
-    alt: 'Car photography frame',
-    title: 'Car Frame',
-    category: 'automotive'
-  }
-];
+// Use Cloudinary images
+const portfolioImages = cloudinaryGalleryImages;
 ---
 
 <Layout title="lateoptics - Photography Portfolio" description="Browse through my automotive photography collection">
@@ -398,9 +13,13 @@ const portfolioImages = [
   <main class="min-h-screen">
     <!-- Mobile Navigation - Gallery and About buttons that disappear on scroll -->
     <div id="mobile-nav" class="lg:hidden fixed top-16 left-0 right-0 z-40 bg-white shadow-sm transition-transform duration-300">
-      <div class="flex justify-center space-x-4 px-4 py-3">
-        <!-- Gallery button (current page) -->
-        <button class="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-thin tracking-wide" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;">
+      <div class="flex justify-center items-center py-3 space-x-4">
+        <!-- Gallery button -->
+        <button 
+          id="mobile-gallery-btn"
+          class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-md text-sm font-thin tracking-wide transition-colors"
+          style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+        >
           Gallery
         </button>
         <!-- About button -->
@@ -436,13 +55,14 @@ const portfolioImages = [
   </main>
   
   <!-- Custom Lightbox -->
-  <div id="lightbox" class="hidden fixed inset-0 bg-black bg-opacity-90 z-[9999] flex items-center justify-center">
+  <div id="lightbox" class="hidden fixed inset-0 bg-black bg-opacity-90 z-[9999] flex items-center justify-center" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
     <div class="relative max-w-full max-h-full p-4">
       <!-- Close button -->
       <button 
         id="lightbox-close"
-        class="absolute top-4 right-4 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2"
+        class="absolute top-4 right-4 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2 transition-colors duration-200"
         aria-label="Close lightbox"
+        type="button"
       >
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -452,8 +72,9 @@ const portfolioImages = [
       <!-- Previous button -->
       <button 
         id="lightbox-prev"
-        class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2"
+        class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2 transition-colors duration-200"
         aria-label="Previous image"
+        type="button"
       >
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -463,8 +84,9 @@ const portfolioImages = [
       <!-- Next button -->
       <button 
         id="lightbox-next"
-        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2"
+        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2 transition-colors duration-200"
         aria-label="Next image"
+        type="button"
       >
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -477,12 +99,12 @@ const portfolioImages = [
           id="lightbox-image"
           src=""
           alt=""
-          class="max-w-full max-h-[80vh] object-contain"
+          class="max-w-full max-h-[80vh] object-contain transition-opacity duration-200"
+          style="opacity: 1;"
         />
         
-        <!-- Image title and counter -->
+        <!-- Image counter only (removed title) -->
         <div class="mt-4 text-center text-white">
-          <div id="lightbox-title" class="mb-2"></div>
           <div id="lightbox-counter" class="text-sm opacity-75"></div>
         </div>
       </div>
@@ -490,6 +112,23 @@ const portfolioImages = [
   </div>
   
   <script define:vars={{ portfolioImages }}>
+    // Import Cloudinary utility client-side with better optimization
+    function buildCloudinaryUrl(publicId, options = {}) {
+      const baseUrl = 'https://res.cloudinary.com/dqrj6xsjs/image/upload';
+      
+      // Enhanced transformations for better performance
+      const transformations = [
+        'f_auto', // Auto format (WebP, AVIF when supported)
+        'q_auto:good', // Good quality setting (faster than auto)
+        options.width ? `w_${options.width}` : 'w_800',
+        options.height ? `h_${options.height}` : null,
+        options.crop || 'c_fit',
+        'fl_progressive:steep' // Progressive JPEG for faster perceived loading
+      ].filter(Boolean).join(',');
+      
+      return `${baseUrl}/${transformations}/${publicId}`;
+    }
+    
     document.addEventListener('DOMContentLoaded', function() {
       const galleryContainer = document.getElementById('gallery-container');
       const portfolioHero = document.getElementById('portfolio-hero');
@@ -555,30 +194,35 @@ const portfolioImages = [
       }
       
       function displayImages() {
-        // Create new ImageGrid HTML - show all automotive images
+        // Create new ImageGrid HTML using optimized Cloudinary URLs
         const gridHTML = `
           <div class="columns-3 md:columns-3 lg:columns-4 xl:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
-            ${portfolioImages.map((image, index) => `
-              <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] mb-3 md:mb-0">
-                <div class="relative bg-gray-100">
-                  <img
-                    src="${image.src}"
-                    alt="${image.alt}"
-                    class="gallery-thumbnail w-full h-auto object-cover transition-transform duration-300"
-                    loading="lazy"
-                    data-index="${index}"
-                  />
-                  <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
+            ${portfolioImages.map((image, index) => {
+              // Use smaller thumbnails for faster loading
+              const thumbnailUrl = buildCloudinaryUrl(image.src, { width: 300, crop: 'c_fill' });
+              return `
+                <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] mb-3 md:mb-0">
+                  <div class="relative bg-gray-100">
+                    <img
+                      src="${thumbnailUrl}"
+                      alt="${image.alt}"
+                      class="gallery-thumbnail w-full h-auto object-cover transition-transform duration-300"
+                      loading="lazy"
+                      data-index="${index}"
+                      decoding="async"
+                    />
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
+                    </div>
                   </div>
                 </div>
-              </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
         `;
         
         galleryContainer.innerHTML = gridHTML;
         
-        // Re-attach lightbox event listeners
+        // Re-attach lightbox event listeners with improved performance
         const thumbnails = document.querySelectorAll('.gallery-thumbnail');
         
         thumbnails.forEach((thumbnail) => {
@@ -600,38 +244,80 @@ const portfolioImages = [
             });
           }
         });
+        
+        // Preload first few images for immediate lightbox access
+        preloadInitialImages();
       }
       
-      // Lightbox function
+      // Lightbox function with preloading
       function openLightbox(index) {
         const lightbox = document.getElementById('lightbox');
         const image = document.getElementById('lightbox-image');
-        const title = document.getElementById('lightbox-title');
         const counter = document.getElementById('lightbox-counter');
         
-        if (!lightbox || !image || !title || !counter || !portfolioImages[index]) {
+        if (!lightbox || !image || !counter || !portfolioImages[index]) {
           return;
         }
         
         currentImageIndex = index;
         
-        // Show lightbox
+        // Show lightbox with proper z-index and prevent scrolling
         lightbox.classList.remove('hidden');
+        lightbox.style.zIndex = '9999';
         document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden'; // Also prevent html scroll
         
-        // Load image
+        // Load high-quality Cloudinary image for lightbox
         const currentImage = portfolioImages[index];
-        image.src = currentImage.src;
+        const lightboxUrl = buildCloudinaryUrl(currentImage.src, { width: 2048 });
+        
+        // Add loading state
+        image.style.opacity = '0.3';
+        image.src = lightboxUrl;
         image.alt = currentImage.alt;
         
-        // Update title - hide alt text
-        title.innerHTML = '';
+        // Remove loading state when image loads
+        image.onload = function() {
+          image.style.opacity = '1';
+        };
         
-        // Update counter
+        // Update counter (removed title display)
         counter.textContent = `${index + 1} / ${portfolioImages.length}`;
         
         // Update navigation buttons
         updateLightboxNavigation();
+        
+        // Preload adjacent images for smoother navigation
+        preloadAdjacentImages(index);
+        
+        // Focus on lightbox for keyboard navigation
+        lightbox.focus();
+      }
+      
+      // Add preloading function for smoother navigation
+      function preloadAdjacentImages(currentIndex) {
+        const preloadIndices = [
+          currentIndex - 1, // Previous image
+          currentIndex + 1  // Next image
+        ].filter(index => index >= 0 && index < portfolioImages.length);
+        
+        preloadIndices.forEach(index => {
+          const img = new Image();
+          const preloadUrl = buildCloudinaryUrl(portfolioImages[index].src, { width: 2048 });
+          img.src = preloadUrl;
+        });
+      }
+      
+      // Preload first few high-res images for immediate lightbox access
+      function preloadInitialImages() {
+        const firstFew = Math.min(3, portfolioImages.length);
+        for (let i = 0; i < firstFew; i++) {
+          setTimeout(() => {
+            const img = new Image();
+            const preloadUrl = buildCloudinaryUrl(portfolioImages[i].src, { width: 2048 });
+            img.src = preloadUrl;
+          }, i * 100); // Stagger preloading to avoid blocking
+        }
       }
       
       function updateLightboxNavigation() {
@@ -662,7 +348,9 @@ const portfolioImages = [
         const lightbox = document.getElementById('lightbox');
         if (lightbox) {
           lightbox.classList.add('hidden');
+          lightbox.style.zIndex = '';
           document.body.style.overflow = '';
+          document.documentElement.style.overflow = ''; // Restore html scroll
         }
       }
       
@@ -691,14 +379,23 @@ const portfolioImages = [
         const lightbox = document.getElementById('lightbox');
         if (!lightbox || lightbox.classList.contains('hidden')) return;
         
+        // Prevent default behavior for arrow keys
+        if (['ArrowLeft', 'ArrowRight', 'Escape'].includes(e.key)) {
+          e.preventDefault();
+        }
+        
         switch(e.key) {
           case 'Escape':
             closeLightbox();
             break;
           case 'ArrowLeft':
+          case 'a':
+          case 'A':
             prevImage();
             break;
           case 'ArrowRight':
+          case 'd':
+          case 'D':
             nextImage();
             break;
         }
@@ -708,10 +405,44 @@ const portfolioImages = [
       const lightbox = document.getElementById('lightbox');
       if (lightbox) {
         lightbox.addEventListener('click', function(e) {
+          // Only close if clicking on the lightbox background, not on the content
           if (e.target === lightbox) {
             closeLightbox();
           }
         });
+        
+        // Touch/swipe support for mobile
+        let startX = null;
+        let startY = null;
+        
+        lightbox.addEventListener('touchstart', function(e) {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        lightbox.addEventListener('touchend', function(e) {
+          if (!startX || !startY) return;
+          
+          const endX = e.changedTouches[0].clientX;
+          const endY = e.changedTouches[0].clientY;
+          
+          const deltaX = endX - startX;
+          const deltaY = endY - startY;
+          
+          // Only handle horizontal swipes (ignore vertical scrolling)
+          if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+            if (deltaX > 0) {
+              // Swipe right - previous image
+              prevImage();
+            } else {
+              // Swipe left - next image  
+              nextImage();
+            }
+          }
+          
+          startX = null;
+          startY = null;
+        }, { passive: true });
       }
       
       // Initialize gallery
