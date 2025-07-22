@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import { cloudinaryGalleryImages } from '../data/cloudinaryImages';
 
 // Use Cloudinary images
@@ -490,4 +491,6 @@ const portfolioImages = cloudinaryGalleryImages;
       displayImages();
     });
   </script>
+
+  <Footer />
 </Layout>
