@@ -2,22 +2,96 @@
 export interface Props {
   title?: string;
   description?: string;
+  keywords?: string;
+  ogImage?: string;
+  canonical?: string;
 }
 
-const { title = "Photography Portfolio", description = "A stunning collection of photography work" } = Astro.props;
+const { 
+  title = "LateOptics - Professional Automotive Photography", 
+  description = "LateOptics professional automotive photography portfolio featuring stunning car photography, automotive art, and creative automotive visuals.",
+  keywords = "LateOptics, automotive photography, car photography, professional automotive photographer, automotive art, car photos, automotive visuals, late optics photography",
+  ogImage = "/image.png",
+  canonical = Astro.url.href
+} = Astro.props;
+
+const siteUrl = Astro.site || 'https://lateoptics.netlify.app';
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/image.png" />
+    
+    <!-- Primary SEO -->
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="LateOptics" />
+    <link rel="canonical" href={canonical} />
+    
+    <!-- Brand Recognition -->
+    <meta name="brand" content="LateOptics" />
+    <meta name="application-name" content="LateOptics" />
+    <meta name="apple-mobile-web-app-title" content="LateOptics" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, siteUrl)} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="LateOptics" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, siteUrl)} />
+    <meta name="twitter:site" content="@lateoptics" />
+    <meta name="twitter:creator" content="@lateoptics" />
+    
+    <!-- Business Information -->
+    <meta name="business:contact_data:locality" content="Photography" />
+    <meta name="business:contact_data:region" content="Automotive" />
+    <meta name="business:contact_data:country_name" content="Professional" />
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "LateOptics",
+        "alternateName": "Late Optics",
+        "url": "{siteUrl}",
+        "logo": "{new URL('/image.png', siteUrl)}",
+        "sameAs": [
+          "https://instagram.com/lateoptics",
+          "https://twitter.com/lateoptics"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "availableLanguage": "en"
+        },
+        "description": "Professional automotive photography services specializing in stunning car photography and automotive art."
+      }
+    </script>
+    
+    <!-- Icons and Manifest -->
+    <link rel="icon" type="image/png" href="/image.png" />
+    <link rel="apple-touch-icon" href="/image.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    
+    <!-- Fonts with preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Cloudinary preconnect for faster image loading -->
+    <link rel="preconnect" href="https://res.cloudinary.com">
     
     <style>
       /* Critical CSS to prevent layout shifts */

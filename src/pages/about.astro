@@ -1,9 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+
+// SEO optimized metadata
+const seoTitle = "About LateOptics - Professional Automotive Photographer";
+const seoDescription = "Learn about LateOptics (Late Optics), a professional automotive photographer specializing in stunning car photography and automotive art. Discover the story behind the lens.";
+const seoKeywords = "About LateOptics, Late Optics photographer, automotive photographer bio, professional car photographer, automotive photography services, LateOptics story";
 ---
 
-<Layout title="About - imlateonrent" description="Learn more about the photographer behind imlateonrent">
+<Layout 
+  title={seoTitle} 
+  description={seoDescription}
+  keywords={seoKeywords}
+  ogImage="/image.png"
+>
   <Header />
   
   <main class="min-h-screen bg-gray-50">

@@ -1,6 +1,14 @@
-# imlateonrent - Automotive Photography Portfolio
+# LateOptics - Professional Automotive Photography Portfolio
 
-A minimalistic, responsive automotive photography portfolio website built with Astro and Tailwind CSS for @imlateonrent.
+**LateOptics** (Late Optics) - A minimalistic, responsive automotive photography portfolio website showcasing professional car photography, automotive art, and creative automotive visuals. Built with Astro and Tailwind CSS.
+
+## 🚗 About LateOptics
+
+LateOptics specializes in professional automotive photography, capturing the essence and beauty of vehicles through artistic and creative photography. Our portfolio features a diverse collection of automotive photography including high-end car photography, creative automotive compositions, and professional automotive art.
+
+## 🌐 Live Website
+
+Visit **LateOptics** at: [https://lateoptics.netlify.app](https://lateoptics.netlify.app)
 
 ## 🚀 Features
 

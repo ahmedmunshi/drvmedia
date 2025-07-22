@@ -6,9 +6,19 @@ import { cloudinaryGalleryImages } from '../data/cloudinaryImages';
 
 // Use Cloudinary images
 const portfolioImages = cloudinaryGalleryImages;
+
+// SEO optimized metadata
+const seoTitle = "LateOptics - Professional Automotive Photography Portfolio";
+const seoDescription = "LateOptics professional automotive photography featuring stunning car photography, automotive art, and creative automotive visuals. View our complete automotive photography portfolio.";
+const seoKeywords = "LateOptics, Late Optics, automotive photography, car photography, professional automotive photographer, automotive art, car photos, automotive visuals, automotive portfolio";
 ---
 
-<Layout title="lateoptics - Photography Portfolio" description="Browse through my automotive photography collection">
+<Layout 
+  title={seoTitle} 
+  description={seoDescription}
+  keywords={seoKeywords}
+  ogImage="/image.png"
+>
   <Header />
   
   <main class="min-h-screen">
@@ -39,14 +49,17 @@ const portfolioImages = cloudinaryGalleryImages;
       <div id="portfolio-hero" class="fixed left-0 right-0 top-32 lg:top-24 flex items-center justify-center pointer-events-none z-10 transition-opacity duration-300">
         <div class="text-center">
           <h1 class="text-4xl lg:text-6xl font-thin text-gray-900 tracking-wide" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.08em;">
-            Portfolio
+            LateOptics
           </h1>
+          <h2 class="text-lg lg:text-xl font-thin text-gray-600 tracking-wide mt-2" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;">
+            Automotive Photography Portfolio
+          </h2>
         </div>
       </div>
     </section>
 
     <!-- Gallery Grid -->
-    <section class="py-8 lg:py-8">
+    <section class="py-8 lg:py-8" role="main" aria-label="Automotive Photography Gallery">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div id="gallery-container">
           <!-- Gallery will be populated by JavaScript -->

@@ -7,9 +7,19 @@ import { cloudinaryGalleryImages } from '../data/cloudinaryImages';
 
 // Use Cloudinary images
 const galleryImages = cloudinaryGalleryImages;
+
+// SEO optimized metadata
+const seoTitle = "LateOptics Gallery - Automotive Photography Collection";
+const seoDescription = "Browse LateOptics complete automotive photography gallery featuring professional car photography, automotive art, and creative automotive visuals from Late Optics.";
+const seoKeywords = "LateOptics gallery, Late Optics portfolio, automotive photography gallery, car photography collection, automotive art gallery, professional automotive photos";
 ---
 
-<Layout title="Gallery - imlateonrent" description="Browse through my automotive photography collection">
+<Layout 
+  title={seoTitle} 
+  description={seoDescription}
+  keywords={seoKeywords}
+  ogImage="/image.png"
+>
   <Header />
   
   <main class="min-h-screen">
@@ -17,8 +27,8 @@ const galleryImages = cloudinaryGalleryImages;
     <section class="py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Gallery</h1>
-          <p class="text-lg text-gray-600">Automotive Photography Collection</p>
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">LateOptics Gallery</h1>
+          <p class="text-lg text-gray-600">Professional Automotive Photography Collection</p>
         </div>
       </div>
     </section>
