@@ -2,7 +2,7 @@
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="fixed top-0 left-0 right-0 z-[100] bg-white shadow-sm border-b border-gray-200" style="position: fixed !important; top: 0 !important; z-index: 100 !important;">
+<header id="main-header" class="fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ease-out" style="position: fixed !important; top: 0 !important; z-index: 100 !important; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);">
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo - Always visible -->
@@ -129,6 +129,51 @@ const currentPath = Astro.url.pathname;
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Header scroll effect
+    const header = document.getElementById('main-header');
+    let lastScrollY = 0;
+    
+    function handleHeaderScroll() {
+      const scrollY = window.scrollY;
+      
+      if (!header) return;
+      
+      // Define the scroll range for the transition (0-150px)
+      const transitionRange = 150;
+      const scrollProgress = Math.min(scrollY / transitionRange, 1);
+      
+      // Start solid (95% opacity) and transition to translucent (5% opacity)
+      const startOpacity = 0.95; // Solid at top
+      const endOpacity = 0.05;   // Translucent when scrolled
+      const backgroundOpacity = startOpacity - (startOpacity - endOpacity) * scrollProgress;
+      
+      // Border transitions from solid to translucent
+      const startBorderOpacity = 0.1;  // Visible border at top
+      const endBorderOpacity = 0.05;   // Subtle border when scrolled
+      const borderOpacity = startBorderOpacity - (startBorderOpacity - endBorderOpacity) * scrollProgress;
+      
+      // Apply the transitions
+      header.style.background = `rgba(255, 255, 255, ${backgroundOpacity})`;
+      header.style.backdropFilter = 'blur(20px)';
+      header.style.borderBottom = `1px solid rgba(0, 0, 0, ${borderOpacity})`;
+      
+      // Shadow fades out as we scroll
+      if (scrollY < transitionRange) {
+        const shadowOpacity = 0.1 * (1 - scrollProgress); // Start with shadow, fade out
+        header.style.boxShadow = `0 1px 3px 0 rgba(0, 0, 0, ${shadowOpacity}), 0 1px 2px 0 rgba(0, 0, 0, ${shadowOpacity * 0.6})`;
+      } else {
+        header.style.boxShadow = 'none';
+      }
+      
+      lastScrollY = scrollY;
+    }
+    
+    // Initial call
+    handleHeaderScroll();
+    
+    // Add scroll listener
+    window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+    
     // Connect sidebar functionality
     const connectBtn = document.getElementById('connect-btn');
     const connectBtnMobile = document.getElementById('connect-btn-mobile');
