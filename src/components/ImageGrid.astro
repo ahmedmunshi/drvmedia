@@ -28,7 +28,11 @@ function getAspectClass(aspect?: 'tall' | 'wide' | 'square', index = 0) {
 }
 ---
 
-<div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+<div 
+  id="image-grid" 
+  class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6 opacity-0 transition-opacity duration-500"
+  style="min-height: 200px;"
+>
   {images.map((image, index) => {
     const { src, srcset } = buildResponsiveImageUrls(image.src);
     const thumbnailSrc = buildCloudinaryUrl(image.src, { 
@@ -38,19 +42,29 @@ function getAspectClass(aspect?: 'tall' | 'wide' | 'square', index = 0) {
       format: 'auto'
     });
     
+    // Create a low-quality placeholder for immediate loading
+    const placeholderSrc = buildCloudinaryUrl(image.src, {
+      width: 50,
+      quality: 30,
+      format: 'auto',
+      blur: 15
+    });
+    
     return (
-      <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+      <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] mb-6">
         <div class="relative bg-gray-100">
           <img
-            src={thumbnailSrc}
-            srcset={srcset}
+            src={placeholderSrc}
+            data-src={thumbnailSrc}
+            data-srcset={srcset}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
             alt={image.alt}
-            class="gallery-thumbnail w-full h-auto object-cover transition-transform duration-300"
+            class="gallery-thumbnail w-full h-auto object-cover transition-all duration-300 blur-sm"
             loading="lazy"
             decoding="async"
             data-index={index}
             data-full-src={src}
+            style="min-height: 200px; background-color: #f3f4f6;"
           />
           <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
           </div>
@@ -59,3 +73,73 @@ function getAspectClass(aspect?: 'tall' | 'wide' | 'square', index = 0) {
     )
   })}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const imageGrid = document.getElementById('image-grid');
+    const images = document.querySelectorAll('.gallery-thumbnail');
+    let imagesLoaded = 0;
+    const totalImages = images.length;
+    
+    // Show grid immediately but with reduced opacity
+    setTimeout(() => {
+      if (imageGrid) {
+        imageGrid.style.opacity = '0.3';
+      }
+    }, 100);
+    
+    function imageLoaded() {
+      imagesLoaded++;
+      
+      // Show grid gradually as images load
+      if (imageGrid) {
+        const progress = imagesLoaded / totalImages;
+        imageGrid.style.opacity = Math.min(0.3 + (progress * 0.7), 1).toString();
+        
+        // Fully visible once most images are loaded
+        if (progress >= 0.7) {
+          imageGrid.style.opacity = '1';
+        }
+      }
+    }
+    
+    // Progressive image loading
+    images.forEach((img) => {
+      if (img instanceof HTMLImageElement) {
+        const highResSrc = img.dataset.src;
+        const highResSrcset = img.dataset.srcset;
+        
+        if (highResSrc) {
+          const tempImg = new Image();
+          
+          tempImg.onload = function() {
+            // Smoothly transition to high-res image
+            img.src = highResSrc;
+            if (highResSrcset) {
+              img.srcset = highResSrcset;
+            }
+            img.classList.remove('blur-sm');
+            img.style.filter = 'none';
+            imageLoaded();
+          };
+          
+          tempImg.onerror = function() {
+            // Still count as loaded even if failed
+            imageLoaded();
+          };
+          
+          tempImg.src = highResSrc;
+        } else {
+          imageLoaded();
+        }
+      }
+    });
+    
+    // Fallback: ensure grid is visible after 3 seconds regardless
+    setTimeout(() => {
+      if (imageGrid) {
+        imageGrid.style.opacity = '1';
+      }
+    }, 3000);
+  });
+</script>

@@ -18,6 +18,59 @@ const { title = "Photography Portfolio", description = "A stunning collection of
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+      /* Critical CSS to prevent layout shifts */
+      .gallery-thumbnail {
+        width: 100%;
+        height: auto;
+        min-height: 200px;
+        background-color: #f3f4f6;
+        object-fit: cover;
+      }
+      
+      /* Smooth transitions for image loading */
+      #image-grid {
+        will-change: opacity;
+      }
+      
+      /* Prevent flash of unstyled content */
+      .columns-1 {
+        column-fill: balance;
+      }
+      
+      /* Optimize rendering performance */
+      img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+      }
+      
+      /* Better spacing for masonry layout */
+      .break-inside-avoid {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 1.5rem;
+      }
+      
+      /* Ensure proper column gaps */
+      @media (min-width: 768px) {
+        .columns-2 {
+          column-gap: 1.5rem;
+        }
+      }
+      
+      @media (min-width: 1024px) {
+        .columns-3 {
+          column-gap: 1.5rem;
+        }
+      }
+      
+      @media (min-width: 1280px) {
+        .columns-4 {
+          column-gap: 1.5rem;
+        }
+      }
+    </style>
   </head>
   <body class="bg-white text-gray-900" style="font-family: 'Poppins', sans-serif;">
     <slot />

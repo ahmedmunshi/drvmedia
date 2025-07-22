@@ -29,10 +29,10 @@ const { images } = Astro.props;
     <!-- Previous button -->
     <button 
       id="lightbox-prev"
-      class="absolute left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-20 p-4 bg-black bg-opacity-50 rounded-full transition-all duration-200 hover:bg-opacity-70 hover:scale-110"
+      class="fixed left-6 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-30 p-4 bg-black bg-opacity-50 rounded-full transition-all duration-200 hover:bg-opacity-70 hover:scale-110 min-w-[56px] min-h-[56px] flex items-center justify-center"
       aria-label="Previous image"
     >
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
       </svg>
     </button>
@@ -40,27 +40,41 @@ const { images } = Astro.props;
     <!-- Next button -->
     <button 
       id="lightbox-next"
-      class="absolute right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-20 p-4 bg-black bg-opacity-50 rounded-full transition-all duration-200 hover:bg-opacity-70 hover:scale-110"
+      class="fixed right-6 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-30 p-4 bg-black bg-opacity-50 rounded-full transition-all duration-200 hover:bg-opacity-70 hover:scale-110 min-w-[56px] min-h-[56px] flex items-center justify-center"
       aria-label="Next image"
     >
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
       </svg>
     </button>
     
     <!-- Image container -->
-    <div class="relative max-w-full max-h-full flex items-center justify-center">
-      <img 
-        id="lightbox-image"
-        class="max-w-full max-h-full object-contain shadow-2xl"
-        src=""
-        alt=""
-        style="max-height: calc(100vh - 120px);"
-      />
+    <div class="fixed inset-0 flex items-center justify-center" style="padding: 80px 120px;">
+      <div class="relative w-full h-full flex items-center justify-center">
+        <img 
+          id="lightbox-image"
+          class="max-w-full max-h-full object-contain shadow-2xl transition-opacity duration-300"
+          src=""
+          alt=""
+          style="opacity: 0;"
+        />
+        
+        <!-- Placeholder/skeleton when image is loading -->
+        <div 
+          id="lightbox-skeleton" 
+          class="absolute inset-0 flex items-center justify-center opacity-1 transition-opacity duration-300"
+          style="background: rgba(40, 40, 40, 0.8); backdrop-filter: blur(10px);"
+        >
+          <div class="text-gray-300 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 border-2 border-gray-500 border-t-white rounded-full animate-spin"></div>
+            <p class="text-sm font-light">Loading image...</p>
+          </div>
+        </div>
+      </div>
     </div>
     
     <!-- Image info -->
-    <div class="absolute bottom-6 left-6 right-6 text-white">
+    <div class="fixed bottom-6 left-6 right-6 text-white z-30">
       <div class="flex justify-between items-end">
         <div id="lightbox-title" class="flex-1">
           <p class="text-lg font-medium"></p>
@@ -72,7 +86,7 @@ const { images } = Astro.props;
     </div>
     
     <!-- Loading indicator -->
-    <div id="lightbox-loading" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden">
+    <div id="lightbox-loading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden z-25">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
     </div>
   </div>
@@ -124,12 +138,16 @@ const { images } = Astro.props;
   
   function showLoading() {
     const loading = document.getElementById('lightbox-loading');
+    const skeleton = document.getElementById('lightbox-skeleton');
     if (loading) loading.classList.remove('hidden');
+    if (skeleton) skeleton.style.opacity = '1';
   }
   
   function hideLoading() {
     const loading = document.getElementById('lightbox-loading');
+    const skeleton = document.getElementById('lightbox-skeleton');
     if (loading) loading.classList.add('hidden');
+    if (skeleton) skeleton.style.opacity = '0';
   }
   
   function openLightbox(index) {
@@ -137,6 +155,7 @@ const { images } = Astro.props;
     const image = document.getElementById('lightbox-image');
     const title = document.getElementById('lightbox-title');
     const counter = document.getElementById('lightbox-counter');
+    const skeleton = document.getElementById('lightbox-skeleton');
     
     if (!lightbox || !image || !title || !counter) return;
     
@@ -145,22 +164,17 @@ const { images } = Astro.props;
     
     const currentImage = images[currentImageIndex];
     
-    // Show loading state
-    showLoading();
-    
-    // First load a low-quality placeholder for instant feedback
-    const placeholderSrc = buildCloudinaryUrl(currentImage.src, {
-      width: 50,
-      quality: 30,
-      format: 'auto',
-      blur: 15
-    });
+    // Show skeleton immediately and hide image
+    if (skeleton) skeleton.style.opacity = '1';
+    image.style.opacity = '0';
+    image.src = ''; // Clear any previous image
     
     // Generate optimized image URL for lightbox based on screen size
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1400); // Cap at 1400px
-    const maxHeight = Math.min(screenHeight * window.devicePixelRatio, 900); // Cap at 900px
+    // Use 90% of screen size instead of device pixel ratio to avoid huge images
+    const maxWidth = Math.min(screenWidth * 0.9, 1400); // Cap at 1400px
+    const maxHeight = Math.min(screenHeight * 0.9, 900); // Cap at 900px
     
     const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
       width: Math.floor(maxWidth),
@@ -170,20 +184,21 @@ const { images } = Astro.props;
       crop: 'fit' // Maintain aspect ratio
     });
     
-    // Show placeholder first
-    image.src = placeholderSrc;
-    image.alt = currentImage.alt;
-    image.style.filter = 'blur(5px)';
-    
-    // Then load the high-quality image
+    // Load the high-quality image
     const highQualityImg = new Image();
     highQualityImg.onload = () => {
       image.src = lightboxImageSrc;
-      image.style.filter = 'none';
-      hideLoading();
+      image.alt = currentImage.alt;
+      image.style.opacity = '1';
+      if (skeleton) skeleton.style.opacity = '0';
     };
     highQualityImg.onerror = () => {
-      hideLoading();
+      // On error, show a fallback or keep skeleton visible
+      console.error('Failed to load lightbox image:', lightboxImageSrc);
+      if (skeleton) {
+        const skeletonText = skeleton.querySelector('p');
+        if (skeletonText) skeletonText.textContent = 'Failed to load image';
+      }
     };
     highQualityImg.src = lightboxImageSrc;
     
@@ -230,27 +245,27 @@ const { images } = Astro.props;
     const image = document.getElementById('lightbox-image');
     const title = document.getElementById('lightbox-title');
     const counter = document.getElementById('lightbox-counter');
+    const skeleton = document.getElementById('lightbox-skeleton');
     
     if (!image || !title || !counter) return;
     
     const currentImage = images[currentImageIndex];
     
-    // Show loading state
-    showLoading();
-    
-    // First load a low-quality placeholder for instant feedback
-    const placeholderSrc = buildCloudinaryUrl(currentImage.src, {
-      width: 50,
-      quality: 30,
-      format: 'auto',
-      blur: 15
-    });
+    // Show skeleton and hide image during loading
+    if (skeleton) {
+      skeleton.style.opacity = '1';
+      const skeletonText = skeleton.querySelector('p');
+      if (skeletonText) skeletonText.textContent = 'Loading image...';
+    }
+    image.style.opacity = '0';
+    image.src = ''; // Clear previous image
     
     // Generate optimized image URL for lightbox based on screen size
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1400); // Cap at 1400px
-    const maxHeight = Math.min(screenHeight * window.devicePixelRatio, 900); // Cap at 900px
+    // Use 90% of screen size instead of device pixel ratio to avoid huge images
+    const maxWidth = Math.min(screenWidth * 0.9, 1400); // Cap at 1400px
+    const maxHeight = Math.min(screenHeight * 0.9, 900); // Cap at 900px
     
     const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
       width: Math.floor(maxWidth),
@@ -260,20 +275,20 @@ const { images } = Astro.props;
       crop: 'fit' // Maintain aspect ratio
     });
     
-    // Show placeholder first
-    image.src = placeholderSrc;
-    image.alt = currentImage.alt;
-    image.style.filter = 'blur(5px)';
-    
-    // Then load the high-quality image
+    // Load the high-quality image
     const highQualityImg = new Image();
     highQualityImg.onload = () => {
       image.src = lightboxImageSrc;
-      image.style.filter = 'none';
-      hideLoading();
+      image.alt = currentImage.alt;
+      image.style.opacity = '1';
+      if (skeleton) skeleton.style.opacity = '0';
     };
     highQualityImg.onerror = () => {
-      hideLoading();
+      console.error('Failed to load lightbox image:', lightboxImageSrc);
+      if (skeleton) {
+        const skeletonText = skeleton.querySelector('p');
+        if (skeletonText) skeletonText.textContent = 'Failed to load image';
+      }
     };
     highQualityImg.src = lightboxImageSrc;
     
@@ -289,10 +304,19 @@ const { images } = Astro.props;
   
   // Ensure DOM is loaded before attaching event listeners
   document.addEventListener('DOMContentLoaded', function() {
-    // Add a small delay to ensure all images are rendered
-    setTimeout(() => {
+    let eventListenersAttached = false;
+    
+    function attachImageEventListeners() {
+      if (eventListenersAttached) return;
+      
       // Gallery thumbnails click handlers
       const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+      
+      if (thumbnails.length === 0) {
+        // If thumbnails aren't ready yet, try again in a bit
+        setTimeout(attachImageEventListeners, 200);
+        return;
+      }
       
       thumbnails.forEach((thumbnail, index) => {
         thumbnail.addEventListener('click', (e) => {
@@ -311,7 +335,29 @@ const { images } = Astro.props;
           });
         }
       });
-    }, 100);
+      
+      eventListenersAttached = true;
+    }
+    
+    // Start trying to attach event listeners immediately
+    attachImageEventListeners();
+    
+    // Also listen for when the image grid becomes visible
+    const imageGrid = document.getElementById('image-grid');
+    if (imageGrid) {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+            const opacity = parseFloat(imageGrid.style.opacity || '0');
+            if (opacity > 0.5 && !eventListenersAttached) {
+              attachImageEventListeners();
+            }
+          }
+        });
+      });
+      
+      observer.observe(imageGrid, { attributes: true, attributeFilter: ['style'] });
+    }
     
     // Lightbox controls
     const closeBtn = document.getElementById('lightbox-close');
