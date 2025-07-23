@@ -4,9 +4,21 @@
 export const cloudinaryGalleryImages = [
   // Featured images - moved to top
   {
+    src: 'IMG_4414_put5nk',
+    alt: 'Automotive shot 4414',
+    title: 'Auto 4414',
+    category: 'automotive'
+  },
+  {
     src: 'IMG_4499_ybrv5h',
     alt: 'Automotive shot 4499',
     title: 'Auto 4499',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_4735_zltcsa',
+    alt: 'Automotive shot 4735',
+    title: 'Auto 4735',
     category: 'automotive'
   },
   {
@@ -405,12 +417,6 @@ export const cloudinaryGalleryImages = [
     src: 'IMG_2969_yjpdq3',
     alt: 'Automotive shot 2969',
     title: 'Auto 2969',
-    category: 'automotive'
-  },
-  {
-    src: 'IMG_4735_zltcsa',
-    alt: 'Automotive shot 4735',
-    title: 'Auto 4735',
     category: 'automotive'
   },
   {
