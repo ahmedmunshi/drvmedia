@@ -59,7 +59,7 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
     <!-- Gallery Grid -->
     <section class="py-8 lg:py-8" role="main" aria-label="Automotive Photography Gallery">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div id="gallery-container">
+        <div id="gallery-container" style="min-height: 400px; opacity: 0; transition: opacity 0.5s ease;">
           <!-- Gallery will be populated by JavaScript -->
         </div>
       </div>
@@ -209,23 +209,40 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
         console.log('displayImages called, portfolioImages length:', portfolioImages.length);
         console.log('First image:', portfolioImages[0]);
         
-        // Create new ImageGrid HTML using optimized Cloudinary URLs
+        // Initialize gallery container with stable opacity
+        if (galleryContainer) {
+          galleryContainer.style.opacity = '0';
+          galleryContainer.style.minHeight = '400px'; // Prevent initial layout shift
+        }
+        
+        // Create new ImageGrid HTML using optimized Cloudinary URLs with stable layout
         const gridHTML = `
-          <div class="columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
+          <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
             ${portfolioImages.map((image, index) => {
               // Use larger thumbnails to give landscape images more presence
               const thumbnailUrl = buildCloudinaryUrl(image.src, { width: 400, quality: 'auto:good', crop: 'fit' });
+              
+              // Create a low-quality placeholder for immediate loading and layout stability
+              const placeholderUrl = buildCloudinaryUrl(image.src, { 
+                width: 50, 
+                quality: 30, 
+                format: 'auto',
+                blur: 15 
+              });
+              
               console.log(`Image ${index}: ${image.src} -> ${thumbnailUrl}`);
               return `
                 <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] mb-3 md:mb-0">
-                  <div class="relative bg-gray-100">
+                  <div class="relative bg-gray-100" style="min-height: 200px;">
                     <img
-                      src="${thumbnailUrl}"
+                      src="${placeholderUrl}"
+                      data-src="${thumbnailUrl}"
                       alt="${image.alt}"
-                      class="gallery-thumbnail w-full h-auto object-cover transition-transform duration-300"
+                      class="gallery-thumbnail w-full h-auto object-cover transition-all duration-500 blur-sm"
                       loading="lazy"
                       data-index="${index}"
                       decoding="async"
+                      style="min-height: 200px; background-color: #f3f4f6;"
                     />
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
                     </div>
@@ -238,9 +255,69 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
         
         galleryContainer.innerHTML = gridHTML;
         
-        // Re-attach lightbox event listeners with improved performance
+        // Progressive image loading for layout stability
         const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+        let imagesLoaded = 0;
+        const totalImages = thumbnails.length;
         
+        // Start with grid at low opacity
+        setTimeout(() => {
+          if (galleryContainer) {
+            galleryContainer.style.opacity = '0.3';
+          }
+        }, 100);
+        
+        function imageLoaded() {
+          imagesLoaded++;
+          
+          // Gradually increase opacity as images load
+          if (galleryContainer) {
+            const progress = imagesLoaded / totalImages;
+            galleryContainer.style.opacity = Math.min(0.3 + (progress * 0.7), 1).toString();
+            
+            // Fully visible once most images are loaded
+            if (progress >= 0.7) {
+              galleryContainer.style.opacity = '1';
+            }
+          }
+        }
+        
+        // Load high-res images progressively
+        thumbnails.forEach((img) => {
+          if (img instanceof HTMLImageElement) {
+            const highResSrc = img.dataset.src;
+            
+            if (highResSrc) {
+              const tempImg = new Image();
+              
+              tempImg.onload = function() {
+                // Smoothly transition to high-res image
+                img.src = highResSrc;
+                img.classList.remove('blur-sm');
+                img.style.filter = 'none';
+                imageLoaded();
+              };
+              
+              tempImg.onerror = function() {
+                // Still count as loaded even if failed
+                imageLoaded();
+              };
+              
+              tempImg.src = highResSrc;
+            } else {
+              imageLoaded();
+            }
+          }
+        });
+        
+        // Fallback: ensure grid is visible after 3 seconds regardless
+        setTimeout(() => {
+          if (galleryContainer) {
+            galleryContainer.style.opacity = '1';
+          }
+        }, 3000);
+        
+        // Re-attach lightbox event listeners with improved performance
         thumbnails.forEach((thumbnail) => {
           thumbnail.addEventListener('click', (e) => {
             e.preventDefault();

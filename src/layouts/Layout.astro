@@ -104,13 +104,33 @@ const siteUrl = Astro.site || 'https://lateoptics.netlify.app';
       }
       
       /* Smooth transitions for image loading */
-      #image-grid {
+      #image-grid,
+      #gallery-container {
         will-change: opacity;
+        transition: opacity 0.5s ease;
       }
       
       /* Prevent flash of unstyled content */
       .columns-1 {
         column-fill: balance;
+      }
+      
+      /* Mobile-specific masonry optimizations to prevent jumping */
+      @media (max-width: 640px) {
+        .columns-1 {
+          column-gap: 0.75rem;
+        }
+        
+        .break-inside-avoid {
+          margin-bottom: 0.75rem;
+          min-height: 200px; /* Prevent extreme height jumps */
+        }
+        
+        .gallery-thumbnail {
+          min-height: 200px;
+          max-height: 500px; /* Prevent extreme tall images on mobile */
+          object-fit: cover;
+        }
       }
       
       /* Optimize rendering performance */
@@ -127,6 +147,12 @@ const siteUrl = Astro.site || 'https://lateoptics.netlify.app';
       }
       
       /* Ensure proper column gaps */
+      @media (min-width: 640px) {
+        .columns-2 {
+          column-gap: 1rem;
+        }
+      }
+      
       @media (min-width: 768px) {
         .columns-2 {
           column-gap: 1.5rem;

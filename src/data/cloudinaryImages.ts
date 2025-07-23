@@ -377,15 +377,106 @@ export const cloudinaryGalleryImages = [
     category: 'automotive'
   },
   {
-    src: 'IMG_6543_bzwevg',
-    alt: 'Automotive capture',
-    title: 'Auto Capture',
-    category: 'automotive'
-  },
-  {
     src: 'IMG_6547_ii8jna',
     alt: 'Car photography frame',
     title: 'Car Frame',
+    category: 'automotive'
+  },
+  // New images from image-names.txt with correct Cloudinary IDs
+  {
+    src: 'IMG_1203_lvoab4',
+    alt: 'Automotive shot 1203',
+    title: 'Auto 1203',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_2790_yu9dyh',
+    alt: 'Automotive shot 2790',
+    title: 'Auto 2790',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_2965_ftscem',
+    alt: 'Automotive shot 2965',
+    title: 'Auto 2965',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_2969_yjpdq3',
+    alt: 'Automotive shot 2969',
+    title: 'Auto 2969',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_4735_zltcsa',
+    alt: 'Automotive shot 4735',
+    title: 'Auto 4735',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5290_ec3pgf',
+    alt: 'Automotive shot 5290',
+    title: 'Auto 5290',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5330_haokpq',
+    alt: 'Automotive shot 5330',
+    title: 'Auto 5330',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5405_g2rfny',
+    alt: 'Automotive shot 5405',
+    title: 'Auto 5405',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5466_it7cid',
+    alt: 'Automotive shot 5466',
+    title: 'Auto 5466',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5493_kbwmnf',
+    alt: 'Automotive shot 5493',
+    title: 'Auto 5493',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5526_ihkxzc',
+    alt: 'Automotive shot 5526',
+    title: 'Auto 5526',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5559_qvfoq5',
+    alt: 'Automotive shot 5559',
+    title: 'Auto 5559',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5743_wjmcbp',
+    alt: 'Automotive shot 5743',
+    title: 'Auto 5743',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5759_jux2bm',
+    alt: 'Automotive shot 5759',
+    title: 'Auto 5759',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5793_xzkqud',
+    alt: 'Automotive shot 5793',
+    title: 'Auto 5793',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5846_ygpff3',
+    alt: 'Automotive shot 5846',
+    title: 'Auto 5846',
     category: 'automotive'
   }
 ];
