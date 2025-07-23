@@ -28,11 +28,12 @@
 - `dpr_auto` - Automatic device pixel ratio handling
 - `e_blur:15` - Blur effect for placeholders
 
-### Size Reductions:
-- **Thumbnails**: 600px → 400px (33% smaller)
-- **Lightbox**: 2048px → max 1400px (32% smaller on average)
-- **Preloading**: 2048px → max 1200px (41% smaller)
+### Size Configuration:
+- **Thumbnails**: 600px (increased from 400px for better quality)
+- **Lightbox**: max 1400px (32% smaller on average)
+- **Preloading**: max 1200px (41% smaller)
 - **Placeholders**: 50px blurred images for instant loading
+- **Responsive srcset**: 600px, 800px, 1200px, 1600px breakpoints
 
 ## Loading Strategy
 

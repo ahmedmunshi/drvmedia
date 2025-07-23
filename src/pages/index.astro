@@ -132,7 +132,7 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
       const transformations = [
         'f_auto',
         'q_auto',
-        options.width ? `w_${options.width}` : 'w_400'
+        options.width ? `w_${options.width}` : 'w_600'
       ].join(',');
       
       return `${baseUrl}/${transformations}/${publicId}`;
@@ -220,7 +220,7 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
           <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
             ${portfolioImages.map((image, index) => {
               // Use larger thumbnails to give landscape images more presence
-              const thumbnailUrl = buildCloudinaryUrl(image.src, { width: 400, quality: 'auto:good', crop: 'fit' });
+              const thumbnailUrl = buildCloudinaryUrl(image.src, { width: 600, quality: 'auto:good', crop: 'fit' });
               
               // Create a low-quality placeholder for immediate loading and layout stability
               const placeholderUrl = buildCloudinaryUrl(image.src, { 

@@ -36,9 +36,9 @@ function getAspectClass(aspect?: 'tall' | 'wide' | 'square', index = 0) {
   {images.map((image, index) => {
     const { src, srcset } = buildResponsiveImageUrls(image.src);
     const thumbnailSrc = buildCloudinaryUrl(image.src, { 
-      width: 400,  // Thumbnail size
+      width: 800,  // Higher resolution thumbnails for crisp display
       crop: 'fit', // Preserve aspect ratio instead of cropping
-      quality: 'auto:good',
+      quality: 'auto:best', // Best quality for crisp thumbnails
       format: 'auto'
     });
     

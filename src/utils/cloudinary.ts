@@ -58,14 +58,14 @@ export function buildCloudinaryUrl(
  * @returns {Object} - Object with src and srcset
  */
 export function buildResponsiveImageUrls(publicId: string) {
-  const sizes = [400, 600, 900, 1200]; // More conservative sizes
+  const sizes = [600, 800, 1200, 1600]; // Higher resolution sizes for better quality
   
   const srcset = sizes
-    .map(width => `${buildCloudinaryUrl(publicId, { width, quality: 'auto:good', format: 'auto' })} ${width}w`)
+    .map(width => `${buildCloudinaryUrl(publicId, { width, quality: 'auto:best', format: 'auto' })} ${width}w`)
     .join(', ');
     
   return {
-    src: buildCloudinaryUrl(publicId, { width: 800, quality: 'auto:good', format: 'auto' }),
+    src: buildCloudinaryUrl(publicId, { width: 1000, quality: 'auto:best', format: 'auto' }),
     srcset
   };
 }
