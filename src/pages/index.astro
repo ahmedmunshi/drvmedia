@@ -69,6 +69,18 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
   <!-- Custom Lightbox -->
   <div id="lightbox" class="hidden fixed inset-0 bg-black bg-opacity-90 z-[9999] flex items-center justify-center" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
     <div class="relative max-w-full max-h-full p-4">
+      <!-- Download button -->
+      <button 
+        id="lightbox-download"
+        class="absolute top-4 right-16 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2 transition-colors duration-200"
+        aria-label="Download image"
+        type="button"
+      >
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+      </button>
+      
       <!-- Close button -->
       <button 
         id="lightbox-close"
@@ -124,18 +136,47 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
   </div>
   
   <script define:vars={{ portfolioImages }}>
-    // Import Cloudinary utility client-side with better optimization
+    // Import Cloudinary utility client-side with proper parameter handling
     function buildCloudinaryUrl(publicId, options = {}) {
-      const baseUrl = 'https://res.cloudinary.com/dqrj6xsjs/image/upload';
+      const cloudName = 'dqrj6xsjs';
+      const {
+        width,
+        height,
+        quality = 'auto',
+        format = 'auto',
+        crop = 'fill',
+        gravity = 'auto',
+        dpr = 'auto',
+        blur
+      } = options;
+
+      let transformations = [];
       
-      // Simplified transformations for testing
-      const transformations = [
-        'f_auto',
-        'q_auto',
-        options.width ? `w_${options.width}` : 'w_600'
-      ].join(',');
+      transformations.push(`q_${quality}`);
+      transformations.push(`f_${format}`);
       
-      return `${baseUrl}/${transformations}/${publicId}`;
+      // Only add dpr if we have width/height constraints
+      if (width || height) {
+        transformations.push(`dpr_${dpr}`);
+      }
+      
+      if (blur) {
+        transformations.push(`e_blur:${blur}`);
+      }
+      
+      if (width || height) {
+        let sizeTransform = '';
+        if (width) sizeTransform += `w_${width}`;
+        if (height) sizeTransform += `${width ? ',' : ''}h_${height}`;
+        sizeTransform += `,c_${crop}`;
+        if (gravity && crop === 'fill') sizeTransform += `,g_${gravity}`;
+        transformations.push(sizeTransform);
+      }
+
+      const baseUrl = `https://res.cloudinary.com/${cloudName}/image/upload`;
+      const transformString = transformations.join(',');
+      
+      return `${baseUrl}/${transformString}/${publicId}`;
     }
     
     document.addEventListener('DOMContentLoaded', function() {
@@ -484,6 +525,112 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
         }
       }
       
+      function downloadCurrentImage() {
+        if (currentImageIndex < 0 || currentImageIndex >= portfolioImages.length) return;
+        
+        const currentImage = portfolioImages[currentImageIndex];
+        console.log('Downloading image:', currentImage);
+        
+        // Generate high-quality download URL without size restrictions
+        const downloadUrl = buildCloudinaryUrl(currentImage.src, {
+          quality: 'auto:best',
+          format: 'jpg'
+          // No width/height = original size
+        });
+        
+        console.log('Download URL:', downloadUrl);
+        
+        // Create filename - sanitize for file system
+        let filename = (currentImage.title || currentImage.alt || 'image')
+          .replace(/[^a-z0-9]/gi, '_')  // Replace non-alphanumeric with underscore
+          .replace(/_+/g, '_')          // Replace multiple underscores with single
+          .replace(/^_|_$/g, '');       // Remove leading/trailing underscores
+        filename = filename || 'image'; // Fallback if empty
+        filename += '.jpg';
+        
+        // Show user feedback
+        const downloadBtn = document.getElementById('lightbox-download');
+        const originalHTML = downloadBtn ? downloadBtn.innerHTML : '';
+        if (downloadBtn) {
+          downloadBtn.innerHTML = '<svg class="w-8 h-8 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+          downloadBtn.disabled = true;
+        }
+        
+        // Use fetch with better error handling and CORS support
+        fetch(downloadUrl, {
+          method: 'GET',
+          mode: 'cors',
+          cache: 'no-cache'
+        })
+          .then(response => {
+            console.log('Fetch response:', response.status, response.statusText);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.blob();
+          })
+          .then(blob => {
+            console.log('Blob created:', blob.size, 'bytes', blob.type);
+            
+            // Create object URL from blob
+            const url = window.URL.createObjectURL(blob);
+            
+            // Create temporary link and trigger download
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.style.display = 'none';
+            
+            // Add link to DOM temporarily
+            document.body.appendChild(link);
+            
+            // Trigger download
+            link.click();
+            
+            // Clean up
+            document.body.removeChild(link);
+            
+            // Clean up object URL after a short delay
+            setTimeout(() => {
+              window.URL.revokeObjectURL(url);
+            }, 1000);
+            
+            console.log('Download triggered successfully');
+          })
+          .catch(error => {
+            console.error('Download failed:', error);
+            
+            // Fallback 1: Try direct download without fetch
+            try {
+              const link = document.createElement('a');
+              link.href = downloadUrl;
+              link.download = filename;
+              link.target = '_blank';
+              link.rel = 'noopener noreferrer';
+              
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              
+              console.log('Fallback download triggered');
+            } catch (fallbackError) {
+              console.error('Fallback download also failed:', fallbackError);
+              
+              // Fallback 2: Open in new window
+              window.open(downloadUrl, '_blank');
+            }
+          })
+          .finally(() => {
+            // Restore button state
+            if (downloadBtn && originalHTML) {
+              setTimeout(() => {
+                downloadBtn.innerHTML = originalHTML;
+                downloadBtn.disabled = false;
+              }, 1500);
+            }
+          });
+      }
+      
       // Set up lightbox navigation
       let currentImageIndex = 0;
       
@@ -491,6 +638,12 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
       const closeBtn = document.getElementById('lightbox-close');
       if (closeBtn) {
         closeBtn.addEventListener('click', closeLightbox);
+      }
+      
+      // Download button
+      const downloadBtn = document.getElementById('lightbox-download');
+      if (downloadBtn) {
+        downloadBtn.addEventListener('click', downloadCurrentImage);
       }
       
       // Navigation buttons
@@ -527,6 +680,11 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
           case 'd':
           case 'D':
             nextImage();
+            break;
+          case 'Enter':
+          case 's':
+          case 'S':
+            downloadCurrentImage();
             break;
         }
       });

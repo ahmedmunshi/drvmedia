@@ -15,6 +15,17 @@ const { images } = Astro.props;
 <!-- Lightbox Modal -->
 <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-95 hidden z-50 flex items-center justify-center">
   <div class="relative w-full h-full flex items-center justify-center px-4 py-8">
+    <!-- Download button -->
+    <button 
+      id="lightbox-download"
+      class="absolute top-6 right-16 md:right-20 text-white hover:text-gray-300 z-20 p-3 bg-black bg-opacity-50 rounded-full transition-all duration-200 hover:bg-opacity-70"
+      aria-label="Download image"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+      </svg>
+    </button>
+
     <!-- Close button -->
     <button 
       id="lightbox-close"
@@ -101,6 +112,14 @@ const { images } = Astro.props;
     right: 0 !important;
     bottom: 0 !important;
     z-index: 50 !important;
+  }
+  
+  /* Ensure download and close buttons are properly positioned */
+  #lightbox-download,
+  #lightbox-close {
+    position: absolute !important;
+    z-index: 70 !important;
+    pointer-events: auto !important;
   }
   
   #lightbox-prev,
@@ -316,6 +335,60 @@ const { images } = Astro.props;
     updateLightboxImage();
   }
   
+  function downloadCurrentImage() {
+    if (!isLightboxOpen || currentImageIndex < 0 || currentImageIndex >= images.length) return;
+    
+    const currentImage = images[currentImageIndex];
+    
+    // Generate high-quality download URL
+    const downloadUrl = buildCloudinaryUrl(currentImage.src, {
+      quality: 'auto:best',
+      format: 'jpg', // Force JPG for maximum compatibility
+      // No size restrictions for download - get original size
+    });
+    
+    // Create filename
+    const filename = `${currentImage.title || currentImage.alt || 'image'}.jpg`;
+    
+    // Use fetch to download the image and convert to blob
+    fetch(downloadUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        // Create object URL from blob
+        const url = window.URL.createObjectURL(blob);
+        
+        // Create temporary link and trigger download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.style.display = 'none';
+        
+        // Add link to DOM temporarily
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up object URL after a short delay
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 100);
+      })
+      .catch(error => {
+        console.error('Download failed:', error);
+        // Fallback: open in new tab if download fails
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.click();
+      });
+  }
+  
   function updateLightboxImage() {
     const image = document.getElementById('lightbox-image');
     const title = document.getElementById('lightbox-title');
@@ -436,11 +509,13 @@ const { images } = Astro.props;
     
     // Lightbox controls
     const closeBtn = document.getElementById('lightbox-close');
+    const downloadBtn = document.getElementById('lightbox-download');
     const prevBtn = document.getElementById('lightbox-prev');
     const nextBtn = document.getElementById('lightbox-next');
     const lightbox = document.getElementById('lightbox');
     
     if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+    if (downloadBtn) downloadBtn.addEventListener('click', downloadCurrentImage);
     if (prevBtn) prevBtn.addEventListener('click', showPrevImage);
     if (nextBtn) nextBtn.addEventListener('click', showNextImage);
     
@@ -469,8 +544,15 @@ const { images } = Astro.props;
           case 'ArrowRight':
           case 'd':
           case 'D':
+            showNextImage();
+            break;
           case ' ':
             showNextImage();
+            break;
+          case 'Enter':
+          case 's':
+          case 'S':
+            downloadCurrentImage();
             break;
         }
       }
