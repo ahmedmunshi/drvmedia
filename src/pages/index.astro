@@ -58,9 +58,38 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
 
     <!-- Gallery Grid -->
     <section class="py-8 lg:py-8" role="main" aria-label="Automotive Photography Gallery">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div id="gallery-container" style="min-height: 400px; opacity: 0; transition: opacity 0.5s ease;">
-          <!-- Gallery will be populated by JavaScript -->
+        <!-- Initialize gallery container visible immediately -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div id="gallery-container" style="min-height: 400px;">
+            <!-- Gallery will be populated by JavaScript -->
+          </div>
+        </div>
+    </section>
+    
+    <!-- Book Session CTA Section -->
+    <section class="py-16 bg-gradient-to-br from-gray-50 to-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl lg:text-4xl font-thin text-gray-900 mb-6 tracking-wide" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.03em;">
+          Ready to Capture Your Vision?
+        </h2>
+        <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed" style="font-family: 'Poppins', sans-serif; font-weight: 200;">
+          From automotive shoots to commercial projects, let's create something extraordinary together.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a 
+            href="/booking" 
+            class="px-8 py-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-lg font-thin tracking-wide shadow-sm hover:shadow-md"
+            style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+          >
+            Book a Session
+          </a>
+          <a 
+            href="/about" 
+            class="px-8 py-4 border border-gray-300 text-gray-700 rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-colors text-lg font-thin tracking-wide"
+            style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+          >
+            Learn More
+          </a>
         </div>
       </div>
     </section>
@@ -246,17 +275,152 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
         portfolioHero.style.opacity = '1';
       }
       
-      function displayImages() {
+      // Smart preloading strategy
+      function getPreloadingStrategy() {
+        const navigator = globalThis.navigator;
+        const connection = navigator?.connection || navigator?.mozConnection || navigator?.webkitConnection;
+        
+        if (connection) {
+          const effectiveType = connection.effectiveType;
+          const saveData = connection.saveData;
+          
+          if (saveData) return 'conservative';
+          
+          switch (effectiveType) {
+            case '4g': return 'aggressive';
+            case '3g': return 'moderate';
+            default: return 'conservative';
+          }
+        }
+        
+        // Fallback: assume moderate for desktop, conservative for mobile
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator?.userAgent || '');
+        return isMobile ? 'moderate' : 'aggressive';
+      }
+      
+      // Preload image utility
+      function preloadImage(url) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = () => {
+            console.warn('Failed to preload:', url);
+            resolve(); // Don't block on failed preloads
+          };
+          img.src = url;
+        });
+      }
+      
+      // Preload batch with progress tracking
+      async function preloadImageBatch(urls, onProgress) {
+        let loaded = 0;
+        const total = urls.length;
+        
+        const preloadPromises = urls.map(async (url) => {
+          await preloadImage(url);
+          loaded++;
+          onProgress?.(loaded, total);
+        });
+        
+        await Promise.all(preloadPromises);
+      }
+      
+      // Update image display when preloaded
+      function updateImageDisplay(img) {
+        if (img instanceof HTMLImageElement && img.dataset.src) {
+          // Smooth transition to high-res image
+          img.style.transition = 'all 0.5s ease-out';
+          img.src = img.dataset.src;
+          
+          // Remove blur and adjust opacity
+          setTimeout(() => {
+            img.classList.remove('blur-sm');
+            img.style.filter = 'none';
+            
+            // Hide skeleton
+            const skeleton = img.closest('.relative')?.querySelector('.image-skeleton');
+            if (skeleton) {
+              skeleton.classList.add('hidden');
+            }
+          }, 50);
+        }
+      }
+      
+      // Smart preloading implementation
+      async function implementSmartPreloading() {
+        const strategy = getPreloadingStrategy();
+        const images = document.querySelectorAll('.gallery-thumbnail');
+        const totalImages = images.length;
+        
+        console.log(`Using ${strategy} preloading strategy for ${totalImages} images`);
+        
+        // Determine batch sizes based on strategy
+        const batchSizes = {
+          aggressive: { priority: 8, secondary: totalImages },
+          moderate: { priority: 6, secondary: Math.min(totalImages, 12) },
+          conservative: { priority: 4, secondary: Math.min(totalImages, 8) }
+        };
+        
+        const { priority, secondary } = batchSizes[strategy];
+        
+        // Phase 1: Priority images (above fold)
+        const priorityImages = Array.from(images).slice(0, priority);
+        const priorityUrls = priorityImages.map(img => img.dataset.src).filter(Boolean);
+        
+        console.log(`Phase 1: Preloading ${priorityUrls.length} priority images`);
+        
+        await preloadImageBatch(priorityUrls, (loaded, total) => {
+          console.log(`Priority: ${loaded}/${total} loaded`);
+          
+          // Update images as they load
+          const img = priorityImages[loaded - 1];
+          if (img && img.dataset.src) {
+            updateImageDisplay(img);
+          }
+        });
+        
+        // Phase 2: Secondary batch (background loading)
+        if (secondary > priority) {
+          const secondaryImages = Array.from(images).slice(priority, secondary);
+          const secondaryUrls = secondaryImages.map(img => img.dataset.src).filter(Boolean);
+          
+          console.log(`Phase 2: Background loading ${secondaryUrls.length} secondary images`);
+          
+          // Start background loading after a short delay
+          setTimeout(async () => {
+            await preloadImageBatch(secondaryUrls, (loaded, total) => {
+              const img = secondaryImages[loaded - 1];
+              if (img && img.dataset.src) {
+                updateImageDisplay(img);
+              }
+            });
+            
+            // Phase 3: Remaining images (if any)
+            if (totalImages > secondary) {
+              const remainingImages = Array.from(images).slice(secondary);
+              const remainingUrls = remainingImages.map(img => img.dataset.src).filter(Boolean);
+              
+              if (remainingUrls.length > 0) {
+                console.log(`Phase 3: Loading ${remainingUrls.length} remaining images`);
+                await preloadImageBatch(remainingUrls, (loaded, total) => {
+                  const img = remainingImages[loaded - 1];
+                  if (img && img.dataset.src) {
+                    updateImageDisplay(img);
+                  }
+                });
+              }
+            }
+            
+            console.log('All images preloaded successfully');
+          }, strategy === 'aggressive' ? 100 : 500);
+        }
+      }
+      
+      async function displayImages() {
         console.log('displayImages called, portfolioImages length:', portfolioImages.length);
         console.log('First image:', portfolioImages[0]);
         
-        // Initialize gallery container with stable opacity
-        if (galleryContainer) {
-          galleryContainer.style.opacity = '0';
-          galleryContainer.style.minHeight = '400px'; // Prevent initial layout shift
-        }
-        
-        // Create new ImageGrid HTML using optimized Cloudinary URLs with stable layout
+        // Create new ImageGrid HTML with immediate visibility and skeletons
         const gridHTML = `
           <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
             ${portfolioImages.map((image, index) => {
@@ -275,51 +439,75 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
               return `
                 <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] mb-3 md:mb-0">
                   <div class="relative bg-gray-100" style="min-height: 200px;">
+                    <!-- Skeleton placeholder that's always visible initially -->
+                    <div class="image-skeleton absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" style="min-height: 200px;">
+                      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-shimmer"></div>
+                    </div>
+                    
                     <img
                       src="${placeholderUrl}"
                       data-src="${thumbnailUrl}"
                       alt="${image.alt}"
-                      class="gallery-thumbnail w-full h-auto object-cover transition-all duration-500 blur-sm"
+                      class="gallery-thumbnail w-full h-auto object-cover transition-all duration-500 blur-sm relative z-10"
                       loading="lazy"
                       data-index="${index}"
                       decoding="async"
                       style="min-height: 200px; background-color: #f3f4f6;"
                     />
-                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center z-20">
+                      <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
               `;
             }).join('')}
           </div>
+          
+          <style>
+            @keyframes shimmer {
+              0% { transform: translateX(-100%); }
+              100% { transform: translateX(100%); }
+            }
+            
+            .animate-shimmer {
+              animation: shimmer 2s infinite;
+            }
+            
+            /* Hide skeleton when image loads */
+            .image-skeleton.hidden {
+              opacity: 0;
+              pointer-events: none;
+            }
+            
+            /* Ensure smooth transitions */
+            .image-skeleton {
+              transition: opacity 0.3s ease-out;
+            }
+          </style>
         `;
         
         galleryContainer.innerHTML = gridHTML;
         
-        // Progressive image loading for layout stability
+        // Smart preloading implementation
+        await implementSmartPreloading();
+        
+        // Re-attach lightbox event listeners with improved performance
         const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+        const skeletons = document.querySelectorAll('.image-skeleton');
         let imagesLoaded = 0;
         const totalImages = thumbnails.length;
         
-        // Start with grid at low opacity
-        setTimeout(() => {
-          if (galleryContainer) {
-            galleryContainer.style.opacity = '0.3';
-          }
-        }, 100);
-        
-        function imageLoaded() {
+        function imageLoaded(img) {
           imagesLoaded++;
           
-          // Gradually increase opacity as images load
-          if (galleryContainer) {
-            const progress = imagesLoaded / totalImages;
-            galleryContainer.style.opacity = Math.min(0.3 + (progress * 0.7), 1).toString();
-            
-            // Fully visible once most images are loaded
-            if (progress >= 0.7) {
-              galleryContainer.style.opacity = '1';
-            }
+          // Hide the skeleton for this specific image
+          const skeleton = img.closest('.relative').querySelector('.image-skeleton');
+          if (skeleton) {
+            skeleton.classList.add('hidden');
           }
         }
         
@@ -336,27 +524,28 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
                 img.src = highResSrc;
                 img.classList.remove('blur-sm');
                 img.style.filter = 'none';
-                imageLoaded();
+                imageLoaded(img);
               };
               
               tempImg.onerror = function() {
-                // Still count as loaded even if failed
-                imageLoaded();
+                // Still count as loaded and hide skeleton even if failed
+                img.classList.remove('blur-sm');
+                imageLoaded(img);
               };
               
               tempImg.src = highResSrc;
             } else {
-              imageLoaded();
+              imageLoaded(img);
             }
           }
         });
         
-        // Fallback: ensure grid is visible after 3 seconds regardless
+        // Fallback: ensure all skeletons are hidden after 5 seconds
         setTimeout(() => {
-          if (galleryContainer) {
-            galleryContainer.style.opacity = '1';
-          }
-        }, 3000);
+          skeletons.forEach(skeleton => {
+            skeleton.classList.add('hidden');
+          });
+        }, 5000);
         
         // Re-attach lightbox event listeners with improved performance
         thumbnails.forEach((thumbnail) => {
@@ -380,7 +569,39 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
         });
         
         // Preload first few images for immediate lightbox access
-        preloadInitialImages();
+        preloadInitialLightboxImages();
+      }
+      
+      // Enhanced lightbox preloading
+      async function preloadInitialLightboxImages() {
+        const strategy = getPreloadingStrategy();
+        const preloadCount = strategy === 'aggressive' ? 6 : strategy === 'moderate' ? 4 : 3;
+        
+        console.log(`Preloading ${preloadCount} lightbox images`);
+        
+        const lightboxUrls = portfolioImages.slice(0, preloadCount).map(image => {
+          const screenWidth = window.innerWidth;
+          const screenHeight = window.innerHeight;
+          const devicePixelRatio = window.devicePixelRatio || 1;
+          const maxWidth = Math.min(screenWidth * devicePixelRatio, 2400);
+          const maxHeight = Math.min(screenHeight * devicePixelRatio, 1600);
+          
+          return buildCloudinaryUrl(image.src, { 
+            width: Math.floor(maxWidth),
+            height: Math.floor(maxHeight),
+            quality: 'auto:best',
+            format: 'auto',
+            crop: 'fit'
+          });
+        });
+        
+        // Preload lightbox images in background
+        setTimeout(async () => {
+          await preloadImageBatch(lightboxUrls, (loaded, total) => {
+            console.log(`Lightbox preload: ${loaded}/${total}`);
+          });
+          console.log('Initial lightbox images preloaded');
+        }, strategy === 'aggressive' ? 200 : 1000);
       }
       
       // Lightbox function with progressive loading
@@ -450,46 +671,36 @@ const seoKeywords = "LateOptics, Late Optics, automotive photography, car photog
         
         // Focus on lightbox for keyboard navigation
         lightbox.focus();
-      }      // Add preloading function for smoother navigation
-      function preloadAdjacentImages(currentIndex) {
+      }      // Enhanced preloading function for smoother navigation
+      async function preloadAdjacentImages(currentIndex) {
+        const strategy = getPreloadingStrategy();
         const preloadIndices = [
           currentIndex - 1, // Previous image
           currentIndex + 1  // Next image
         ].filter(index => index >= 0 && index < portfolioImages.length);
         
-        preloadIndices.forEach(index => {
-          const img = new Image();
-          const screenWidth = window.innerWidth;
-          const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1200); // Smaller for preloading
-          const preloadUrl = buildCloudinaryUrl(portfolioImages[index].src, { 
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const devicePixelRatio = window.devicePixelRatio || 1;
+        const maxWidth = Math.min(screenWidth * devicePixelRatio, strategy === 'aggressive' ? 2400 : 1800);
+        const maxHeight = Math.min(screenHeight * devicePixelRatio, strategy === 'aggressive' ? 1600 : 1200);
+        
+        const preloadUrls = preloadIndices.map(index => {
+          return buildCloudinaryUrl(portfolioImages[index].src, { 
             width: Math.floor(maxWidth),
-            quality: 'auto:good',
+            height: Math.floor(maxHeight),
+            quality: 'auto:best',
             format: 'auto',
             crop: 'fit'
           });
-          img.src = preloadUrl;
         });
+        
+        // Preload without blocking
+        preloadImageBatch(preloadUrls, (loaded, total) => {
+          console.log(`Adjacent images: ${loaded}/${total} preloaded`);
+        }).catch(console.warn);
       }
       
-      // Preload first few high-res images for immediate lightbox access
-      function preloadInitialImages() {
-        const firstFew = Math.min(3, portfolioImages.length);
-        const screenWidth = window.innerWidth;
-        const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1200); // Smaller for initial preloading
-        
-        for (let i = 0; i < firstFew; i++) {
-          setTimeout(() => {
-            const img = new Image();
-            const preloadUrl = buildCloudinaryUrl(portfolioImages[i].src, { 
-              width: Math.floor(maxWidth),
-              quality: 'auto:good',
-              format: 'auto',
-              crop: 'fit'
-            });
-            img.src = preloadUrl;
-          }, i * 100); // Stagger preloading to avoid blocking
-        }
-      }
       
       function updateLightboxNavigation() {
         const prevBtn = document.getElementById('lightbox-prev');

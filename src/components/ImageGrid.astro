@@ -1,5 +1,5 @@
 ---
-import { buildResponsiveImageUrls, buildCloudinaryUrl } from '../utils/cloudinary';
+import { buildResponsiveImageUrls, buildThumbnailUrls } from '../utils/cloudinary';
 
 export interface Props {
   images: Array<{
@@ -30,43 +30,43 @@ function getAspectClass(aspect?: 'tall' | 'wide' | 'square', index = 0) {
 
 <div 
   id="image-grid" 
-  class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6 opacity-0 transition-opacity duration-500"
+  class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6"
   style="min-height: 200px;"
 >
   {images.map((image, index) => {
     const { src, srcset } = buildResponsiveImageUrls(image.src);
-    const thumbnailSrc = buildCloudinaryUrl(image.src, { 
-      width: 800,  // Higher resolution thumbnails for crisp display
-      crop: 'fit', // Preserve aspect ratio instead of cropping
-      quality: 'auto:best', // Best quality for crisp thumbnails
-      format: 'auto'
-    });
-    
-    // Create a low-quality placeholder for immediate loading
-    const placeholderSrc = buildCloudinaryUrl(image.src, {
-      width: 50,
-      quality: 30,
-      format: 'auto',
-      blur: 15
-    });
+    const { thumbnail, placeholder } = buildThumbnailUrls(image.src);
     
     return (
       <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] mb-6">
         <div class="relative bg-gray-100">
+          <!-- Skeleton placeholder that's always visible initially -->
+          <div 
+            class="image-skeleton absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse"
+            style="min-height: 200px;"
+          >
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-shimmer"></div>
+          </div>
+          
           <img
-            src={placeholderSrc}
-            data-src={thumbnailSrc}
+            src={placeholder}
+            data-src={thumbnail}
             data-srcset={srcset}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
             alt={image.alt}
-            class="gallery-thumbnail w-full h-auto object-cover transition-all duration-300 blur-sm"
+            class="gallery-thumbnail w-full h-auto object-cover transition-all duration-500 blur-sm opacity-70 relative z-10"
             loading="lazy"
             decoding="async"
             data-index={index}
             data-full-src={src}
             style="min-height: 200px; background-color: #f3f4f6;"
           />
-          <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
+          <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center z-20">
+            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -74,72 +74,257 @@ function getAspectClass(aspect?: 'tall' | 'wide' | 'square', index = 0) {
   })}
 </div>
 
+<style>
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+  
+  /* Hide skeleton when image loads */
+  .gallery-thumbnail.loaded + .image-skeleton,
+  .image-skeleton.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* Ensure smooth transitions */
+  .image-skeleton {
+    transition: opacity 0.3s ease-out;
+  }
+</style>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const imageGrid = document.getElementById('image-grid');
     const images = document.querySelectorAll('.gallery-thumbnail');
-    let imagesLoaded = 0;
-    const totalImages = images.length;
+    const skeletons = document.querySelectorAll('.image-skeleton');
     
-    // Show grid immediately but with reduced opacity
-    setTimeout(() => {
-      if (imageGrid) {
-        imageGrid.style.opacity = '0.3';
-      }
-    }, 100);
-    
-    function imageLoaded() {
-      imagesLoaded++;
+    // Smart preloading strategy
+    function getPreloadingStrategy() {
+      const navigator = globalThis.navigator;
+      const connection = navigator?.connection || navigator?.mozConnection || navigator?.webkitConnection;
       
-      // Show grid gradually as images load
-      if (imageGrid) {
-        const progress = imagesLoaded / totalImages;
-        imageGrid.style.opacity = Math.min(0.3 + (progress * 0.7), 1).toString();
+      if (connection) {
+        const effectiveType = connection.effectiveType;
+        const saveData = connection.saveData;
         
-        // Fully visible once most images are loaded
-        if (progress >= 0.7) {
-          imageGrid.style.opacity = '1';
+        if (saveData) return 'conservative';
+        
+        switch (effectiveType) {
+          case '4g': return 'aggressive';
+          case '3g': return 'moderate';
+          default: return 'conservative';
         }
+      }
+      
+      // Fallback: assume moderate for desktop, conservative for mobile
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator?.userAgent || '');
+      return isMobile ? 'moderate' : 'aggressive';
+    }
+    
+    // Preload image utility
+    function preloadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => {
+          console.warn('Failed to preload:', url);
+          resolve(); // Don't block on failed preloads
+        };
+        img.src = url;
+      });
+    }
+    
+    // Preload batch with progress tracking
+    async function preloadImageBatch(urls, onProgress) {
+      let loaded = 0;
+      const total = urls.length;
+      
+      const preloadPromises = urls.map(async (url) => {
+        await preloadImage(url);
+        loaded++;
+        onProgress?.(loaded, total);
+      });
+      
+      await Promise.all(preloadPromises);
+    }
+    
+    // Smart preloading implementation
+    async function implementSmartPreloading() {
+      const strategy = getPreloadingStrategy();
+      const totalImages = images.length;
+      
+      console.log(`Using ${strategy} preloading strategy for ${totalImages} images`);
+      
+      // Determine batch sizes based on strategy
+      const batchSizes = {
+        aggressive: { priority: 8, secondary: totalImages },
+        moderate: { priority: 6, secondary: Math.min(totalImages, 12) },
+        conservative: { priority: 4, secondary: Math.min(totalImages, 8) }
+      };
+      
+      const { priority, secondary } = batchSizes[strategy];
+      
+      // Phase 1: Priority images (above fold)
+      const priorityImages = Array.from(images).slice(0, priority);
+      const priorityUrls = priorityImages.map(img => img.dataset.src).filter(Boolean);
+      
+      console.log(`Phase 1: Preloading ${priorityUrls.length} priority images`);
+      
+      await preloadImageBatch(priorityUrls, (loaded, total) => {
+        console.log(`Priority: ${loaded}/${total} loaded`);
+        
+        // Update images as they load
+        const img = priorityImages[loaded - 1];
+        if (img && img.dataset.src) {
+          updateImageDisplay(img);
+        }
+      });
+      
+      // Phase 2: Secondary batch (background loading)
+      if (secondary > priority) {
+        const secondaryImages = Array.from(images).slice(priority, secondary);
+        const secondaryUrls = secondaryImages.map(img => img.dataset.src).filter(Boolean);
+        
+        console.log(`Phase 2: Background loading ${secondaryUrls.length} secondary images`);
+        
+        // Start background loading after a short delay
+        setTimeout(async () => {
+          await preloadImageBatch(secondaryUrls, (loaded, total) => {
+            const img = secondaryImages[loaded - 1];
+            if (img && img.dataset.src) {
+              updateImageDisplay(img);
+            }
+          });
+          
+          // Phase 3: Remaining images (if any)
+          if (totalImages > secondary) {
+            const remainingImages = Array.from(images).slice(secondary);
+            const remainingUrls = remainingImages.map(img => img.dataset.src).filter(Boolean);
+            
+            if (remainingUrls.length > 0) {
+              console.log(`Phase 3: Loading ${remainingUrls.length} remaining images`);
+              await preloadImageBatch(remainingUrls, (loaded, total) => {
+                const img = remainingImages[loaded - 1];
+                if (img && img.dataset.src) {
+                  updateImageDisplay(img);
+                }
+              });
+            }
+          }
+          
+          console.log('All images preloaded successfully');
+        }, strategy === 'aggressive' ? 100 : 500);
       }
     }
     
-    // Progressive image loading
-    images.forEach((img) => {
-      if (img instanceof HTMLImageElement) {
-        const highResSrc = img.dataset.src;
-        const highResSrcset = img.dataset.srcset;
+    // Update image display when preloaded
+    function updateImageDisplay(img) {
+      if (img instanceof HTMLImageElement && img.dataset.src) {
+        // Smooth transition to high-res image
+        img.style.transition = 'all 0.5s ease-out';
+        img.src = img.dataset.src;
         
-        if (highResSrc) {
-          const tempImg = new Image();
+        // Remove blur and adjust opacity
+        setTimeout(() => {
+          img.classList.remove('blur-sm');
+          img.classList.remove('opacity-70');
+          img.style.filter = 'none';
           
-          tempImg.onload = function() {
-            // Smoothly transition to high-res image
-            img.src = highResSrc;
-            if (highResSrcset) {
-              img.srcset = highResSrcset;
-            }
-            img.classList.remove('blur-sm');
-            img.style.filter = 'none';
-            imageLoaded();
-          };
-          
-          tempImg.onerror = function() {
-            // Still count as loaded even if failed
-            imageLoaded();
-          };
-          
-          tempImg.src = highResSrc;
-        } else {
-          imageLoaded();
-        }
+          // Hide skeleton
+          const skeleton = img.closest('.relative')?.querySelector('.image-skeleton');
+          if (skeleton) {
+            skeleton.classList.add('hidden');
+          }
+        }, 50);
       }
+    }
+    
+    // Enhanced intersection observer for remaining images
+    const observerOptions = {
+      root: null,
+      rootMargin: '100px',
+      threshold: 0.1
+    };
+    
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img instanceof HTMLImageElement && img.dataset.src && img.src.includes('blur')) {
+            updateImageDisplay(img);
+            imageObserver.unobserve(img);
+          }
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all images that aren't preloaded yet
+    function observeRemainingImages() {
+      images.forEach((img) => {
+        if (img instanceof HTMLImageElement && img.src.includes('blur')) {
+          imageObserver.observe(img);
+        }
+      });
+    }
+    
+    // Initialize smart preloading
+    implementSmartPreloading().then(() => {
+      // Observe any remaining images that weren't preloaded
+      observeRemainingImages();
     });
     
-    // Fallback: ensure grid is visible after 3 seconds regardless
+    // Fallback: ensure all skeletons are hidden after 10 seconds
     setTimeout(() => {
-      if (imageGrid) {
-        imageGrid.style.opacity = '1';
+      skeletons.forEach(skeleton => {
+        skeleton.classList.add('hidden');
+      });
+      
+      // Force load any remaining images
+      images.forEach((img) => {
+        if (img instanceof HTMLImageElement && img.dataset.src && img.src.includes('blur')) {
+          updateImageDisplay(img);
+        }
+      });
+    }, 10000);
+    
+    // Performance monitoring
+    const loadStartTime = performance.now();
+    
+    // Monitor when all priority images are loaded
+    function checkLoadCompletion() {
+      const loadedImages = Array.from(images).filter(img => 
+        img instanceof HTMLImageElement && !img.src.includes('blur')
+      ).length;
+      
+      if (loadedImages >= Math.min(images.length, 6)) {
+        const loadTime = performance.now() - loadStartTime;
+        console.log(`Priority images loaded in ${Math.round(loadTime)}ms`);
       }
-    }, 3000);
+    }
+    
+    // Check load completion periodically
+    const completionChecker = setInterval(() => {
+      checkLoadCompletion();
+      
+      // Stop checking when all images are loaded
+      const allLoaded = Array.from(images).every(img => 
+        img instanceof HTMLImageElement && !img.src.includes('blur')
+      );
+      
+      if (allLoaded) {
+        clearInterval(completionChecker);
+        const totalLoadTime = performance.now() - loadStartTime;
+        console.log(`All images loaded in ${Math.round(totalLoadTime)}ms`);
+      }
+    }, 500);
   });
 </script>

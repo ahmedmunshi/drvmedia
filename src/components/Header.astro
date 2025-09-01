@@ -40,25 +40,41 @@ const currentPath = Astro.url.pathname;
           </a>
         </div>
         
-        <!-- Desktop Connect button -->
-        <button 
-          id="connect-btn"
-          class="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-thin hover:bg-gray-800 transition-colors tracking-wide"
-          style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
-        >
-          Connect
-        </button>
+        <!-- Desktop Book Session button -->
+        <div class="flex items-center space-x-4">
+          <button 
+            id="connect-btn"
+            class="px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md text-sm font-thin transition-colors tracking-wide"
+            style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+          >
+            Connect
+          </button>
+          <a 
+            href="/booking"
+            class="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-thin hover:bg-gray-800 transition-colors tracking-wide"
+            style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+          >
+            Book Session
+          </a>
+        </div>
       </div>
       
-      <!-- Mobile Connect button - Always visible on mobile -->
-      <div class="md:hidden">
+      <!-- Mobile Book Session button - Always visible on mobile -->
+      <div class="md:hidden flex items-center space-x-2">
         <button 
           id="connect-btn-mobile"
-          class="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-thin hover:bg-gray-800 transition-colors tracking-wide"
+          class="px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md text-sm font-thin transition-colors tracking-wide"
           style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
         >
           Connect
         </button>
+        <a 
+          href="/booking"
+          class="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-thin hover:bg-gray-800 transition-colors tracking-wide"
+          style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+        >
+          Book
+        </a>
       </div>
     </div>
   </nav>

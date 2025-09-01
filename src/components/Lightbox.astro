@@ -1,5 +1,5 @@
 ---
-import { buildCloudinaryUrl } from '../utils/cloudinary';
+import { buildLightboxImageUrl, buildLightboxPlaceholder } from '../utils/cloudinary';
 
 export interface Props {
   images: Array<{
@@ -187,9 +187,9 @@ const { images } = Astro.props;
 </style>
 
 <script define:vars={{ images }}>
-  // Import Cloudinary utility (we'll need to make this available in the client)
+  // Import Cloudinary utility for client-side use
   function buildCloudinaryUrl(publicId, options = {}) {
-    const cloudName = 'dqrj6xsjs'; // Your cloud name
+    const cloudName = 'dqrj6xsjs';
     const {
       width,
       height,
@@ -198,7 +198,8 @@ const { images } = Astro.props;
       crop = 'fill',
       gravity = 'auto',
       dpr = 'auto',
-      blur
+      blur,
+      progressive
     } = options;
 
     let transformations = [];
@@ -209,6 +210,10 @@ const { images } = Astro.props;
     
     if (blur) {
       transformations.push(`e_blur:${blur}`);
+    }
+    
+    if (progressive) {
+      transformations.push('fl_progressive:steep');
     }
     
     if (width || height) {
@@ -223,12 +228,69 @@ const { images } = Astro.props;
     const baseUrl = `https://res.cloudinary.com/${cloudName}/image/upload`;
     const transformString = transformations.join(',');
     
-    // Images are uploaded directly to root, not in a folder
     return `${baseUrl}/${transformString}/${publicId}`;
+  }
+
+  // Enhanced lightbox image URL generation
+  function buildLightboxImageUrl(publicId, screenWidth, screenHeight) {
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    
+    // Use higher resolution for crisp display, but cap to prevent excessive downloads
+    const maxWidth = Math.min(screenWidth * devicePixelRatio * 0.95, 2400);
+    const maxHeight = Math.min(screenHeight * devicePixelRatio * 0.95, 1600);
+    
+    return buildCloudinaryUrl(publicId, {
+      width: Math.floor(maxWidth),
+      height: Math.floor(maxHeight),
+      quality: 'auto:best',
+      format: 'auto',
+      crop: 'fit',
+      progressive: true
+    });
+  }
+
+  // Generate appropriately sized placeholder for lightbox
+  function buildLightboxPlaceholder(publicId, targetWidth, targetHeight) {
+    // Create a reasonably sized placeholder (20% of target size, min 200px)
+    const placeholderWidth = Math.max(Math.floor(targetWidth * 0.2), 200);
+    const placeholderHeight = Math.max(Math.floor(targetHeight * 0.2), 150);
+    
+    return buildCloudinaryUrl(publicId, {
+      width: placeholderWidth,
+      height: placeholderHeight,
+      quality: 25, // Low quality but not too pixelated
+      format: 'auto',
+      crop: 'fit',
+      blur: 8 // Less blur since it's higher resolution
+    });
   }
 
   let currentImageIndex = 0;
   let isLightboxOpen = false;
+  const preloadedImages = new Map(); // Cache for preloaded images
+  
+  function preloadAdjacentImages() {
+    if (!isLightboxOpen) return;
+    
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    
+    // Preload next and previous images
+    const indicesToPreload = [
+      (currentImageIndex + 1) % images.length,
+      currentImageIndex > 0 ? currentImageIndex - 1 : images.length - 1
+    ];
+    
+    indicesToPreload.forEach(index => {
+      const image = images[index];
+      if (image && !preloadedImages.has(index)) {
+        const url = buildLightboxImageUrl(image.src, screenWidth, screenHeight);
+        const img = new Image();
+        img.onload = () => preloadedImages.set(index, url);
+        img.src = url;
+      }
+    });
+  }
   
   function showLoading() {
     const loading = document.getElementById('lightbox-loading');
@@ -261,40 +323,70 @@ const { images } = Astro.props;
     // Show skeleton immediately and hide image
     if (skeleton) skeleton.style.opacity = '1';
     image.style.opacity = '0';
-    image.src = ''; // Clear any previous image
+    image.src = '';
     
-    // Generate optimized image URL for lightbox based on screen size
+    // Generate high-quality image URL and placeholder
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    // Use 90% of screen size instead of device pixel ratio to avoid huge images
-    const maxWidth = Math.min(screenWidth * 0.9, 1400); // Cap at 1400px
-    const maxHeight = Math.min(screenHeight * 0.9, 900); // Cap at 900px
     
-    const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
-      width: Math.floor(maxWidth),
-      height: Math.floor(maxHeight),
-      quality: 'auto:good',
-      format: 'auto',
-      crop: 'fit' // Maintain aspect ratio
-    });
+    // Calculate target dimensions for both placeholder and final image
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const targetWidth = Math.min(screenWidth * devicePixelRatio * 0.95, 2400);
+    const targetHeight = Math.min(screenHeight * devicePixelRatio * 0.95, 1600);
     
-    // Load the high-quality image
-    const highQualityImg = new Image();
-    highQualityImg.onload = () => {
-      image.src = lightboxImageSrc;
+    // Check if high-quality image is already preloaded
+    let lightboxImageSrc;
+    if (preloadedImages.has(currentImageIndex)) {
+      lightboxImageSrc = preloadedImages.get(currentImageIndex);
+    } else {
+      lightboxImageSrc = buildLightboxImageUrl(currentImage.src, screenWidth, screenHeight);
+    }
+    
+    // Generate and show appropriately sized placeholder first
+    const placeholderSrc = buildLightboxPlaceholder(currentImage.src, targetWidth, targetHeight);
+    
+    // Load placeholder immediately
+    const placeholderImg = new Image();
+    placeholderImg.onload = () => {
+      image.src = placeholderSrc;
       image.alt = currentImage.alt;
-      image.style.opacity = '1';
+      image.style.opacity = '0.8'; // Show placeholder with slight transparency
+      image.style.filter = 'blur(4px)'; // Add slight blur to indicate it's loading
       if (skeleton) skeleton.style.opacity = '0';
+      
+      // Now load the high-quality image
+      const highQualityImg = new Image();
+      highQualityImg.onload = () => {
+        // Smooth transition to high-quality image
+        image.style.transition = 'all 0.3s ease-out';
+        image.src = lightboxImageSrc;
+        image.style.opacity = '1';
+        image.style.filter = 'none';
+        
+        // Start preloading adjacent images
+        setTimeout(preloadAdjacentImages, 100);
+      };
+      
+      highQualityImg.onerror = () => {
+        console.error('Failed to load high-quality lightbox image:', lightboxImageSrc);
+        // Remove blur from placeholder if high-quality fails
+        image.style.filter = 'blur(2px)';
+        image.style.opacity = '1';
+      };
+      
+      highQualityImg.src = lightboxImageSrc;
     };
-    highQualityImg.onerror = () => {
-      // On error, show a fallback or keep skeleton visible
-      console.error('Failed to load lightbox image:', lightboxImageSrc);
+    
+    placeholderImg.onerror = () => {
+      console.error('Failed to load placeholder image');
+      // Fall back to skeleton if placeholder fails
       if (skeleton) {
         const skeletonText = skeleton.querySelector('p');
-        if (skeletonText) skeletonText.textContent = 'Failed to load image';
+        if (skeletonText) skeletonText.textContent = 'Loading image...';
       }
     };
-    highQualityImg.src = lightboxImageSrc;
+    
+    placeholderImg.src = placeholderSrc;
     
     // Update title
     const titleP = title.querySelector('p');
@@ -406,39 +498,67 @@ const { images } = Astro.props;
       if (skeletonText) skeletonText.textContent = 'Loading image...';
     }
     image.style.opacity = '0';
-    image.src = ''; // Clear previous image
+    image.src = '';
     
-    // Generate optimized image URL for lightbox based on screen size
+    // Generate high-quality image URL and placeholder
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    // Use 90% of screen size instead of device pixel ratio to avoid huge images
-    const maxWidth = Math.min(screenWidth * 0.9, 1400); // Cap at 1400px
-    const maxHeight = Math.min(screenHeight * 0.9, 900); // Cap at 900px
     
-    const lightboxImageSrc = buildCloudinaryUrl(currentImage.src, {
-      width: Math.floor(maxWidth),
-      height: Math.floor(maxHeight),
-      quality: 'auto:good',
-      format: 'auto',
-      crop: 'fit' // Maintain aspect ratio
-    });
+    // Calculate target dimensions
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const targetWidth = Math.min(screenWidth * devicePixelRatio * 0.95, 2400);
+    const targetHeight = Math.min(screenHeight * devicePixelRatio * 0.95, 1600);
     
-    // Load the high-quality image
-    const highQualityImg = new Image();
-    highQualityImg.onload = () => {
-      image.src = lightboxImageSrc;
+    // Check if high-quality image is already preloaded
+    let lightboxImageSrc;
+    if (preloadedImages.has(currentImageIndex)) {
+      lightboxImageSrc = preloadedImages.get(currentImageIndex);
+    } else {
+      lightboxImageSrc = buildLightboxImageUrl(currentImage.src, screenWidth, screenHeight);
+    }
+    
+    // Generate and show appropriately sized placeholder first
+    const placeholderSrc = buildLightboxPlaceholder(currentImage.src, targetWidth, targetHeight);
+    
+    // Load placeholder immediately
+    const placeholderImg = new Image();
+    placeholderImg.onload = () => {
+      image.src = placeholderSrc;
       image.alt = currentImage.alt;
-      image.style.opacity = '1';
+      image.style.opacity = '0.8';
+      image.style.filter = 'blur(4px)';
       if (skeleton) skeleton.style.opacity = '0';
+      
+      // Now load the high-quality image
+      const highQualityImg = new Image();
+      highQualityImg.onload = () => {
+        image.style.transition = 'all 0.3s ease-out';
+        image.src = lightboxImageSrc;
+        image.style.opacity = '1';
+        image.style.filter = 'none';
+        
+        // Preload adjacent images for smooth navigation
+        setTimeout(preloadAdjacentImages, 100);
+      };
+      
+      highQualityImg.onerror = () => {
+        console.error('Failed to load high-quality lightbox image:', lightboxImageSrc);
+        image.style.filter = 'blur(2px)';
+        image.style.opacity = '1';
+      };
+      
+      highQualityImg.src = lightboxImageSrc;
     };
-    highQualityImg.onerror = () => {
-      console.error('Failed to load lightbox image:', lightboxImageSrc);
+    
+    placeholderImg.onerror = () => {
+      console.error('Failed to load placeholder image');
       if (skeleton) {
         const skeletonText = skeleton.querySelector('p');
-        if (skeletonText) skeletonText.textContent = 'Failed to load image';
+        if (skeletonText) skeletonText.textContent = 'Loading image...';
       }
     };
-    highQualityImg.src = lightboxImageSrc;
+    
+    placeholderImg.src = placeholderSrc;
     
     // Update title
     const titleP = title.querySelector('p');
