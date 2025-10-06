@@ -326,14 +326,22 @@ const seoKeywords = "book automotive photography, car photography session, autom
             throw new Error('Spam detected');
           }
           
-          // Submit to Netlify
-          const response = await fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData).toString()
-          });
+          // Check if we're in development mode
+          const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
           
-          if (response.ok) {
+          if (isDev) {
+            // In development, just log the form data and show success
+            console.log('=== BOOKING FORM SUBMISSION (DEV MODE) ===');
+            for (const [key, value] of formData.entries()) {
+              if (key !== 'bot-field' && key !== 'form-name') {
+                console.log(`${key}:`, value);
+              }
+            }
+            console.log('=====================================');
+            
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
             // Show success message
             successMessage.classList.remove('hidden');
             form.reset();
@@ -341,7 +349,23 @@ const seoKeywords = "book automotive photography, car photography session, autom
             // Scroll to success message
             successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            throw new Error('Form submission failed');
+            // In production, submit to Netlify
+            const response = await fetch('/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams(formData).toString()
+            });
+            
+            if (response.ok) {
+              // Show success message
+              successMessage.classList.remove('hidden');
+              form.reset();
+              
+              // Scroll to success message
+              successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+              throw new Error('Form submission failed');
+            }
           }
           
         } catch (error) {
