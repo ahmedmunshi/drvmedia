@@ -62,7 +62,14 @@ const seoKeywords = "book automotive photography, car photography session, autom
         </div>
 
         <!-- Booking Form -->
-        <form id="booking-form" class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <form 
+          id="booking-form" 
+          name="booking" 
+          method="POST" 
+          data-netlify="true" 
+          netlify-honeypot="bot-field"
+          class="bg-white rounded-xl shadow-sm border border-gray-200 p-8"
+        >
           
           <!-- Personal Information -->
           <div class="mb-10">
@@ -199,9 +206,12 @@ const seoKeywords = "book automotive photography, car photography session, autom
             </div>
           </div>
 
-          <!-- Anti-spam honeypot field (hidden) -->
+          <!-- Netlify form name (hidden) -->
+          <input type="hidden" name="form-name" value="booking" />
+          
+          <!-- Netlify bot-field honeypot (hidden) -->
           <div class="hidden">
-            <input type="text" name="website" tabindex="-1" autocomplete="off" />
+            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
           </div>
 
           <!-- Submit Button -->
@@ -312,22 +322,18 @@ const seoKeywords = "book automotive photography, car photography session, autom
           const formData = new FormData(form);
           
           // Check honeypot field
-          if (formData.get('website')) {
+          if (formData.get('bot-field')) {
             throw new Error('Spam detected');
           }
           
-          const response = await fetch('/api/booking', {
+          // Submit to Netlify
+          const response = await fetch('/', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
           });
           
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          
-          const result = await response.json();
-          
-          if (result.success) {
+          if (response.ok) {
             // Show success message
             successMessage.classList.remove('hidden');
             form.reset();
@@ -335,7 +341,7 @@ const seoKeywords = "book automotive photography, car photography session, autom
             // Scroll to success message
             successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            throw new Error(result.message || 'Form submission failed');
+            throw new Error('Form submission failed');
           }
           
         } catch (error) {
