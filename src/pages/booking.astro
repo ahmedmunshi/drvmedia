@@ -63,12 +63,7 @@ const seoKeywords = "book automotive photography, car photography session, autom
 
         <!-- Booking Form -->
         <form 
-          id="booking-form" 
-          name="booking" 
-          method="POST" 
-          action="/booking/"
-          data-netlify="true" 
-          netlify-honeypot="bot-field"
+          id="booking-form"
           class="bg-white rounded-xl shadow-sm border border-gray-200 p-8"
         >
           
@@ -207,13 +202,7 @@ const seoKeywords = "book automotive photography, car photography session, autom
             </div>
           </div>
 
-          <!-- Netlify form name (hidden) -->
-          <input type="hidden" name="form-name" value="booking" />
-          
-          <!-- Netlify bot-field honeypot (hidden) -->
-          <div class="hidden">
-            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-          </div>
+
 
           <!-- Submit Button -->
           <div class="flex flex-col sm:flex-row gap-4 items-center justify-between pt-8 border-t border-gray-200">
@@ -265,6 +254,12 @@ const seoKeywords = "book automotive photography, car photography session, autom
       </div>
     </section>
   </main>
+  
+  <!-- EmailJS Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init("LcYIzdrE038Y9kiZD");
+  </script>
   
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -322,52 +317,37 @@ const seoKeywords = "book automotive photography, car photography session, autom
         try {
           const formData = new FormData(form);
           
-          // Check honeypot field
-          if (formData.get('bot-field')) {
-            throw new Error('Spam detected');
-          }
-          
-          // Check if we're in development mode
-          const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-          
-          if (isDev) {
-            // In development, just log the form data and show success
-            console.log('=== BOOKING FORM SUBMISSION (DEV MODE) ===');
-            for (const [key, value] of formData.entries()) {
-              if (key !== 'bot-field' && key !== 'form-name') {
-                console.log(`${key}:`, value);
-              }
+          // Send email using EmailJS
+          const result = await emailjs.send(
+            'service_7zm9oyk',
+            'template_r2ajl5d',
+            {
+              from_name: formData.get('name'),
+              from_email: formData.get('email'),
+              phone: formData.get('phone') || 'Not provided',
+              project_type: formData.get('projectType'),
+              timeline: formData.get('timeline'),
+              referral: formData.get('referral') || 'Not specified',
+              message: formData.get('projectDetails'),
+              time: new Date().toLocaleString('en-US', {
+                timeZone: 'Africa/Lusaka',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              })
             }
-            console.log('=====================================');
-            
-            // Simulate network delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Show success message
-            successMessage.classList.remove('hidden');
-            form.reset();
-            
-            // Scroll to success message
-            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          } else {
-            // In production, submit to Netlify
-            const response = await fetch('/booking/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: new URLSearchParams(formData).toString()
-            });
-            
-            if (response.ok) {
-              // Show success message
-              successMessage.classList.remove('hidden');
-              form.reset();
-              
-              // Scroll to success message
-              successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-              throw new Error('Form submission failed');
-            }
-          }
+          );
+          
+          console.log('Email sent successfully:', result);
+          
+          // Show success message
+          successMessage.classList.remove('hidden');
+          form.reset();
+          
+          // Scroll to success message
+          successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
           
         } catch (error) {
           console.error('Form submission error:', error);
