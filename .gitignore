@@ -32,3 +32,6 @@ pnpm-debug.log*
 
 # booking data (development backup)
 bookings/
+
+# Netlify build artifacts
+.netlify/
