@@ -66,6 +66,7 @@ const seoKeywords = "book automotive photography, car photography session, autom
           id="booking-form" 
           name="booking" 
           method="POST" 
+          action="/booking/"
           data-netlify="true" 
           netlify-honeypot="bot-field"
           class="bg-white rounded-xl shadow-sm border border-gray-200 p-8"
@@ -350,7 +351,7 @@ const seoKeywords = "book automotive photography, car photography session, autom
             successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
             // In production, submit to Netlify
-            const response = await fetch('/', {
+            const response = await fetch('/booking/', {
               method: 'POST',
               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
               body: new URLSearchParams(formData).toString()
