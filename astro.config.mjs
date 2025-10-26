@@ -10,14 +10,14 @@ export default defineConfig({
   site: 'https://lateoptics.netlify.app',
   compressHTML: true,
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'never',
     assets: '_astro'
   },
   vite: {
     build: {
       rollupOptions: {
         output: {
-          assetFileNames: 'assets/[name].[hash][extname]'
+          assetFileNames: '_astro/[name].[hash][extname]'
         }
       }
     }
