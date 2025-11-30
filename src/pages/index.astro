@@ -4,13 +4,11 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { cloudinaryGalleryImages } from '../data/cloudinaryImages';
 
-// Use Cloudinary images
-const portfolioImages = cloudinaryGalleryImages;
+const seoTitle = "drvmedia - Professional Automotive Photography";
+const seoDescription = "drvmedia's professional photography portfolio featuring automotive photography, portraits, and creative visuals. Explore a diverse collection of stunning photography work.";
+const seoKeywords = "drvmedia, photographer, automotive photography, portrait photography, professional photographer, photography portfolio, creative photography";
 
-// SEO optimized metadata
-const seoTitle = "Ahmed Munshi - Professional Photography Portfolio";
-const seoDescription = "Ahmed Munshi's professional photography portfolio featuring automotive photography, portraits, and creative visuals. Explore a diverse collection of stunning photography work.";
-const seoKeywords = "Ahmed Munshi, photographer, automotive photography, portrait photography, professional photographer, photography portfolio, creative photography";
+const featuredImages = cloudinaryGalleryImages.slice(0, 6);
 ---
 
 <Layout 
@@ -22,58 +20,159 @@ const seoKeywords = "Ahmed Munshi, photographer, automotive photography, portrai
   <Header />
   
   <main class="min-h-screen">
-    <!-- Mobile Navigation - Gallery and About buttons that disappear on scroll -->
-    <div id="mobile-nav" class="lg:hidden fixed top-16 left-0 right-0 z-40 bg-white shadow-sm transition-transform duration-300">
-      <div class="flex justify-center items-center py-3 space-x-4">
-        <!-- Gallery button -->
-        <button 
-          id="mobile-gallery-btn"
-          class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-md text-sm font-thin tracking-wide transition-colors"
-          style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
-        >
-          Gallery
-        </button>
-        <!-- About button -->
-        <a 
-          href="/about" 
-          class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-md text-sm font-thin tracking-wide transition-colors"
-          style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
-        >
-          About
-        </a>
-      </div>
-    </div>
-
-    <!-- Portfolio Hero Section - Positioned in flow -->
-    <section class="pt-16 lg:pt-16 pb-32 lg:pb-40 relative">
-      <div id="portfolio-hero" class="fixed left-0 right-0 top-32 lg:top-24 flex items-center justify-center pointer-events-none z-10 transition-opacity duration-300">
-        <div class="text-center">
-          <h1 class="text-4xl lg:text-5xl font-thin text-gray-900 tracking-wide" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.03em;">
+    <section class="pt-32 lg:pt-40 pb-16 lg:pb-24 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-12 gap-8 lg:gap-16 items-start">
+          <div class="col-span-12 lg:col-span-7 space-y-8">
+            <div>
+              <h1 class="text-5xl lg:text-7xl font-thin text-gray-900 mb-6 leading-tight" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.02em;">
+                Capturing Motion,<br/>Defining Moments
+              </h1>
+              
+              <p class="text-xl lg:text-2xl text-gray-600 font-thin leading-relaxed mb-8" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.01em;">
+                Automotive photography that tells stories through light, form, and passion.
+              </p>
+              
+              <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                <a 
+                  href="/booking" 
+                  class="px-8 py-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-lg font-thin tracking-wide shadow-sm hover:shadow-md"
+                  style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+                >
+                  Book a Session
+                </a>
+                <a 
+                  href="/gallery" 
+                  class="px-8 py-4 border border-gray-300 text-gray-700 rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-colors text-lg font-thin tracking-wide"
+                  style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+                >
+                  View Gallery
+                </a>
+              </div>
+            </div>
+            
+            <div class="space-y-6 pt-8 border-t border-gray-200">
+              <h2 class="text-2xl lg:text-3xl font-thin text-gray-900" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.02em;">
+                What We Do
+              </h2>
+              
+              <div class="space-y-4 text-gray-600 text-lg leading-relaxed" style="font-family: 'Poppins', sans-serif; font-weight: 200;">
+                <p>
+                  Specializing in automotive photography that captures the essence of every vehicle—from classic curves to modern engineering marvels.
+                </p>
+                <p>
+                  We work with enthusiasts, collectors, and brands to create stunning visual narratives that showcase craftsmanship, detail, and emotion.
+                </p>
+                <p>
+                  Every shoot is tailored to highlight what makes your vehicle unique, whether it's a track-ready build, a pristine restoration, or a daily driver with character.
+                </p>
+              </div>
+            </div>
+          </div>
           
-            Photography Portfolio
-          </h1>
-        </div>
-      </div>
-    </section>
-
-     <!-- Gallery Grid -->
-    <section class="py-8 lg:py-8" role="main" aria-label="Photography Gallery">
-        <!-- Initialize gallery container visible immediately -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div id="gallery-container" style="min-height: 400px;">
-            <!-- Gallery will be populated by JavaScript -->
+          <div class="col-span-12 lg:col-span-5 space-y-6">
+            <div class="relative overflow-hidden rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <img 
+                src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_800,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[0].src}`}
+                alt={featuredImages[0].alt}
+                class="w-full h-auto object-cover"
+                loading="eager"
+              />
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <img 
+                  src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[1].src}`}
+                  alt={featuredImages[1].alt}
+                  class="w-full h-auto object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <img 
+                  src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[2].src}`}
+                  alt={featuredImages[2].alt}
+                  class="w-full h-auto object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </div>
           </div>
         </div>
+        
+        <div class="mt-24 lg:mt-32 grid grid-cols-12 gap-8 lg:gap-16 items-center">
+          <div class="col-span-12 lg:col-span-5 order-2 lg:order-1">
+            <div class="relative overflow-hidden rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <img 
+                src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_800,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[3].src}`}
+                alt={featuredImages[3].alt}
+                class="w-full h-auto object-cover"
+                loading="lazy"
+              />
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mt-6">
+              <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <img 
+                  src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[4].src}`}
+                  alt={featuredImages[4].alt}
+                  class="w-full h-auto object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <img 
+                  src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[5].src}`}
+                  alt={featuredImages[5].alt}
+                  class="w-full h-auto object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-span-12 lg:col-span-7 order-1 lg:order-2 space-y-8">
+            <h2 class="text-3xl lg:text-4xl font-thin text-gray-900 leading-tight" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.02em;">
+              Built on Passion,<br/>Delivered with Precision
+            </h2>
+            
+            <div class="space-y-6 text-gray-600 text-lg leading-relaxed" style="font-family: 'Poppins', sans-serif; font-weight: 200;">
+              <p>
+                From concept to final delivery, we bring technical expertise and creative vision to every project.
+              </p>
+              <p>
+                Our approach combines dynamic composition, natural lighting techniques, and careful post-production to deliver images that stand out.
+              </p>
+              <p>
+                Whether you need portfolio shots for social media, professional marketing materials, or high-resolution prints, we craft visuals that make an impact.
+              </p>
+            </div>
+            
+            <div class="pt-6">
+              <a 
+                href="/about" 
+                class="inline-flex items-center text-gray-900 hover:text-gray-600 transition-colors text-lg font-thin tracking-wide group"
+                style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+              >
+                Learn more about us
+                <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
     
-    <!-- Book Session CTA Section -->
     <section class="py-16 bg-gradient-to-br from-gray-50 to-white">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl lg:text-4xl font-thin text-gray-900 mb-6 tracking-wide" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.03em;">
-          Ready to Capture Your Vision?
+          Ready to Collaborate?
         </h2>
         <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed" style="font-family: 'Poppins', sans-serif; font-weight: 200;">
-          From automotive shoots to portraits and creative projects, let's create something extraordinary together.
+          Let's create something extraordinary together. Get in touch to discuss your project and bring your vision to life.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a 
@@ -83,869 +182,30 @@ const seoKeywords = "Ahmed Munshi, photographer, automotive photography, portrai
           >
             Book a Session
           </a>
-          <a 
-            href="/about" 
+          <button 
+            id="connect-btn-cta"
             class="px-8 py-4 border border-gray-300 text-gray-700 rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-colors text-lg font-thin tracking-wide"
             style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
           >
-            Learn More
-          </a>
+            Connect
+          </button>
         </div>
       </div>
     </section>
   </main>
   
-  <!-- Custom Lightbox -->
-  <div id="lightbox" class="hidden fixed inset-0 bg-black bg-opacity-90 z-[9999] flex items-center justify-center" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
-    <div class="relative max-w-full max-h-full p-4">
-      <!-- Download button -->
-      <button 
-        id="lightbox-download"
-        class="absolute top-4 right-16 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2 transition-colors duration-200"
-        aria-label="Download image"
-        type="button"
-      >
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-        </svg>
-      </button>
-      
-      <!-- Close button -->
-      <button 
-        id="lightbox-close"
-        class="absolute top-4 right-4 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2 transition-colors duration-200"
-        aria-label="Close lightbox"
-        type="button"
-      >
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-      
-      <!-- Previous button -->
-      <button 
-        id="lightbox-prev"
-        class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2 transition-colors duration-200"
-        aria-label="Previous image"
-        type="button"
-      >
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-      </button>
-      
-      <!-- Next button -->
-      <button 
-        id="lightbox-next"
-        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-[10000] bg-black bg-opacity-50 rounded-full p-2 transition-colors duration-200"
-        aria-label="Next image"
-        type="button"
-      >
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-        </svg>
-      </button>
-      
-      <!-- Image container -->
-      <div class="flex flex-col items-center">
-        <img 
-          id="lightbox-image"
-          src=""
-          alt=""
-          class="max-w-full max-h-[80vh] object-contain transition-opacity duration-200"
-          style="opacity: 1;"
-        />
-        
-        <!-- Image counter only (removed title) -->
-        <div class="mt-4 text-center text-white">
-          <div id="lightbox-counter" class="text-sm opacity-75"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <script define:vars={{ portfolioImages }}>
-    // Import Cloudinary utility client-side with proper parameter handling
-    function buildCloudinaryUrl(publicId, options = {}) {
-      const cloudName = 'dqrj6xsjs';
-      const {
-        width,
-        height,
-        quality = 'auto',
-        format = 'auto',
-        crop = 'fill',
-        gravity = 'auto',
-        dpr = 'auto',
-        blur
-      } = options;
-
-      let transformations = [];
-      
-      transformations.push(`q_${quality}`);
-      transformations.push(`f_${format}`);
-      
-      // Only add dpr if we have width/height constraints
-      if (width || height) {
-        transformations.push(`dpr_${dpr}`);
-      }
-      
-      if (blur) {
-        transformations.push(`e_blur:${blur}`);
-      }
-      
-      if (width || height) {
-        let sizeTransform = '';
-        if (width) sizeTransform += `w_${width}`;
-        if (height) sizeTransform += `${width ? ',' : ''}h_${height}`;
-        sizeTransform += `,c_${crop}`;
-        if (gravity && crop === 'fill') sizeTransform += `,g_${gravity}`;
-        transformations.push(sizeTransform);
-      }
-
-      const baseUrl = `https://res.cloudinary.com/${cloudName}/image/upload`;
-      const transformString = transformations.join(',');
-      
-      return `${baseUrl}/${transformString}/${publicId}`;
-    }
-    
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const galleryContainer = document.getElementById('gallery-container');
-      const portfolioHero = document.getElementById('portfolio-hero');
-      const mobileNav = document.getElementById('mobile-nav');
+      const connectBtnCta = document.getElementById('connect-btn-cta');
       
-      console.log('DOMContentLoaded - galleryContainer:', galleryContainer);
-      console.log('portfolioImages available:', typeof portfolioImages !== 'undefined', portfolioImages?.length);
-      
-      // EDIT THESE PIXEL VALUES TO CONTROL FADE BEHAVIOR
-      const FADE_START_PIXEL = 5; // Change this number to adjust when fade begins
-      const FADE_AMOUNT_PIXEL = 25; // Change this number to adjust fade duration/distance
-      const NAV_HIDE_PIXEL = 100; // When to hide mobile navigation
-      
-      // Variables for scroll speed detection
-      let lastScrollTop = 0;
-      let scrollSpeed = 0;
-      let lastScrollTime = Date.now();
-      
-      // Scroll animation for portfolio hero and mobile navigation
-      function handleScroll() {
-        const scrolled = window.scrollY;
-        const currentTime = Date.now();
-        const timeDiff = currentTime - lastScrollTime;
-        
-        // Calculate scroll speed (pixels per millisecond)
-        scrollSpeed = Math.abs(scrolled - lastScrollTop) / timeDiff;
-        lastScrollTop = scrolled;
-        lastScrollTime = currentTime;
-        
-        // Portfolio hero fade behavior - enhanced with scroll speed
-        if (scrolled > FADE_START_PIXEL) {
-          const fadeProgress = (scrolled - FADE_START_PIXEL) / FADE_AMOUNT_PIXEL;
-          
-          // Speed multiplier: faster scrolling = faster fade
-          const speedMultiplier = Math.min(scrollSpeed * 2, 3); // Cap at 3x speed
-          const enhancedFadeProgress = fadeProgress * (1 + speedMultiplier);
-          
-          const opacity = Math.max(0, 1 - enhancedFadeProgress);
-          
-          if (portfolioHero) {
-            portfolioHero.style.opacity = opacity;
-          }
-        } else {
-          if (portfolioHero) {
-            portfolioHero.style.opacity = '1';
-          }
-        }
-        
-        // Mobile navigation hide behavior
-        if (mobileNav) {
-          if (scrolled > NAV_HIDE_PIXEL) {
-            mobileNav.style.transform = 'translateY(-100%)';
-          } else {
-            mobileNav.style.transform = 'translateY(0)';
-          }
-        }
-      }
-      
-      // Add scroll listener
-      window.addEventListener('scroll', handleScroll);
-      
-      // Initialize hero visibility
-      if (portfolioHero) {
-        portfolioHero.style.display = 'flex';
-        portfolioHero.style.opacity = '1';
-      }
-      
-      // Smart preloading strategy
-      function getPreloadingStrategy() {
-        const navigator = globalThis.navigator;
-        const connection = navigator?.connection || navigator?.mozConnection || navigator?.webkitConnection;
-        
-        if (connection) {
-          const effectiveType = connection.effectiveType;
-          const saveData = connection.saveData;
-          
-          if (saveData) return 'conservative';
-          
-          switch (effectiveType) {
-            case '4g': return 'aggressive';
-            case '3g': return 'moderate';
-            default: return 'conservative';
-          }
-        }
-        
-        // Fallback: assume moderate for desktop, conservative for mobile
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator?.userAgent || '');
-        return isMobile ? 'moderate' : 'aggressive';
-      }
-      
-      // Preload image utility
-      function preloadImage(url) {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => resolve();
-          img.onerror = () => {
-            console.warn('Failed to preload:', url);
-            resolve(); // Don't block on failed preloads
-          };
-          img.src = url;
-        });
-      }
-      
-      // Preload batch with progress tracking
-      async function preloadImageBatch(urls, onProgress) {
-        let loaded = 0;
-        const total = urls.length;
-        
-        const preloadPromises = urls.map(async (url) => {
-          await preloadImage(url);
-          loaded++;
-          onProgress?.(loaded, total);
-        });
-        
-        await Promise.all(preloadPromises);
-      }
-      
-      // Update image display when preloaded
-      function updateImageDisplay(img) {
-        if (img instanceof HTMLImageElement && img.dataset.src) {
-          // Smooth transition to high-res image
-          img.style.transition = 'all 0.5s ease-out';
-          img.src = img.dataset.src;
-          
-          // Remove blur and adjust opacity
-          setTimeout(() => {
-            img.classList.remove('blur-sm');
-            img.style.filter = 'none';
-            
-            // Hide skeleton
-            const skeleton = img.closest('.relative')?.querySelector('.image-skeleton');
-            if (skeleton) {
-              skeleton.classList.add('hidden');
-            }
-          }, 50);
-        }
-      }
-      
-      // Smart preloading implementation
-      async function implementSmartPreloading() {
-        const strategy = getPreloadingStrategy();
-        const images = document.querySelectorAll('.gallery-thumbnail');
-        const totalImages = images.length;
-        
-        console.log(`Using ${strategy} preloading strategy for ${totalImages} images`);
-        
-        // Determine batch sizes based on strategy
-        const batchSizes = {
-          aggressive: { priority: 8, secondary: totalImages },
-          moderate: { priority: 6, secondary: Math.min(totalImages, 12) },
-          conservative: { priority: 4, secondary: Math.min(totalImages, 8) }
-        };
-        
-        const { priority, secondary } = batchSizes[strategy];
-        
-        // Phase 1: Priority images (above fold)
-        const priorityImages = Array.from(images).slice(0, priority);
-        const priorityUrls = priorityImages.map(img => img.dataset.src).filter(Boolean);
-        
-        console.log(`Phase 1: Preloading ${priorityUrls.length} priority images`);
-        
-        await preloadImageBatch(priorityUrls, (loaded, total) => {
-          console.log(`Priority: ${loaded}/${total} loaded`);
-          
-          // Update images as they load
-          const img = priorityImages[loaded - 1];
-          if (img && img.dataset.src) {
-            updateImageDisplay(img);
+      if (connectBtnCta) {
+        connectBtnCta.addEventListener('click', function() {
+          const connectBtn = document.getElementById('connect-btn');
+          if (connectBtn) {
+            connectBtn.click();
           }
         });
-        
-        // Phase 2: Secondary batch (background loading)
-        if (secondary > priority) {
-          const secondaryImages = Array.from(images).slice(priority, secondary);
-          const secondaryUrls = secondaryImages.map(img => img.dataset.src).filter(Boolean);
-          
-          console.log(`Phase 2: Background loading ${secondaryUrls.length} secondary images`);
-          
-          // Start background loading after a short delay
-          setTimeout(async () => {
-            await preloadImageBatch(secondaryUrls, (loaded, total) => {
-              const img = secondaryImages[loaded - 1];
-              if (img && img.dataset.src) {
-                updateImageDisplay(img);
-              }
-            });
-            
-            // Phase 3: Remaining images (if any)
-            if (totalImages > secondary) {
-              const remainingImages = Array.from(images).slice(secondary);
-              const remainingUrls = remainingImages.map(img => img.dataset.src).filter(Boolean);
-              
-              if (remainingUrls.length > 0) {
-                console.log(`Phase 3: Loading ${remainingUrls.length} remaining images`);
-                await preloadImageBatch(remainingUrls, (loaded, total) => {
-                  const img = remainingImages[loaded - 1];
-                  if (img && img.dataset.src) {
-                    updateImageDisplay(img);
-                  }
-                });
-              }
-            }
-            
-            console.log('All images preloaded successfully');
-          }, strategy === 'aggressive' ? 100 : 500);
-        }
       }
-      
-      async function displayImages() {
-        console.log('displayImages called, portfolioImages length:', portfolioImages.length);
-        console.log('First image:', portfolioImages[0]);
-        
-        // Create new ImageGrid HTML with immediate visibility and skeletons
-        const gridHTML = `
-          <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
-            ${portfolioImages.map((image, index) => {
-              // Use larger thumbnails to give landscape images more presence
-              const thumbnailUrl = buildCloudinaryUrl(image.src, { width: 600, quality: 'auto:good', crop: 'fit' });
-              
-              // Create a low-quality placeholder for immediate loading and layout stability
-              const placeholderUrl = buildCloudinaryUrl(image.src, { 
-                width: 50, 
-                quality: 30, 
-                format: 'auto',
-                blur: 15 
-              });
-              
-              console.log(`Image ${index}: ${image.src} -> ${thumbnailUrl}`);
-              return `
-                <div class="break-inside-avoid group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] mb-3 md:mb-0">
-                  <div class="relative bg-gray-100" style="min-height: 200px;">
-                    <!-- Skeleton placeholder that's always visible initially -->
-                    <div class="image-skeleton absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" style="min-height: 200px;">
-                      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-shimmer"></div>
-                    </div>
-                    
-                    <img
-                      src="${placeholderUrl}"
-                      data-src="${thumbnailUrl}"
-                      alt="${image.alt}"
-                      class="gallery-thumbnail w-full h-auto object-cover transition-all duration-500 blur-sm relative z-10"
-                      loading="lazy"
-                      data-index="${index}"
-                      decoding="async"
-                      style="min-height: 200px; background-color: #f3f4f6;"
-                    />
-                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center z-20">
-                      <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-          
-          <style>
-            @keyframes shimmer {
-              0% { transform: translateX(-100%); }
-              100% { transform: translateX(100%); }
-            }
-            
-            .animate-shimmer {
-              animation: shimmer 2s infinite;
-            }
-            
-            /* Hide skeleton when image loads */
-            .image-skeleton.hidden {
-              opacity: 0;
-              pointer-events: none;
-            }
-            
-            /* Ensure smooth transitions */
-            .image-skeleton {
-              transition: opacity 0.3s ease-out;
-            }
-          </style>
-        `;
-        
-        galleryContainer.innerHTML = gridHTML;
-        
-        // Smart preloading implementation
-        await implementSmartPreloading();
-        
-        // Re-attach lightbox event listeners with improved performance
-        const thumbnails = document.querySelectorAll('.gallery-thumbnail');
-        const skeletons = document.querySelectorAll('.image-skeleton');
-        let imagesLoaded = 0;
-        const totalImages = thumbnails.length;
-        
-        function imageLoaded(img) {
-          imagesLoaded++;
-          
-          // Hide the skeleton for this specific image
-          const skeleton = img.closest('.relative').querySelector('.image-skeleton');
-          if (skeleton) {
-            skeleton.classList.add('hidden');
-          }
-        }
-        
-        // Load high-res images progressively
-        thumbnails.forEach((img) => {
-          if (img instanceof HTMLImageElement) {
-            const highResSrc = img.dataset.src;
-            
-            if (highResSrc) {
-              const tempImg = new Image();
-              
-              tempImg.onload = function() {
-                // Smoothly transition to high-res image
-                img.src = highResSrc;
-                img.classList.remove('blur-sm');
-                img.style.filter = 'none';
-                imageLoaded(img);
-              };
-              
-              tempImg.onerror = function() {
-                // Still count as loaded and hide skeleton even if failed
-                img.classList.remove('blur-sm');
-                imageLoaded(img);
-              };
-              
-              tempImg.src = highResSrc;
-            } else {
-              imageLoaded(img);
-            }
-          }
-        });
-        
-        // Fallback: ensure all skeletons are hidden after 5 seconds
-        setTimeout(() => {
-          skeletons.forEach(skeleton => {
-            skeleton.classList.add('hidden');
-          });
-        }, 5000);
-        
-        // Re-attach lightbox event listeners with improved performance
-        thumbnails.forEach((thumbnail) => {
-          thumbnail.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const index = parseInt(thumbnail.dataset.index);
-            openLightbox(index);
-          });
-          
-          // Also add click handler to the container div
-          const container = thumbnail.closest('.group');
-          if (container) {
-            container.addEventListener('click', (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              const index = parseInt(thumbnail.dataset.index);
-              openLightbox(index);
-            });
-          }
-        });
-        
-        // Preload first few images for immediate lightbox access
-        preloadInitialLightboxImages();
-      }
-      
-      // Enhanced lightbox preloading
-      async function preloadInitialLightboxImages() {
-        const strategy = getPreloadingStrategy();
-        const preloadCount = strategy === 'aggressive' ? 6 : strategy === 'moderate' ? 4 : 3;
-        
-        console.log(`Preloading ${preloadCount} lightbox images`);
-        
-        const lightboxUrls = portfolioImages.slice(0, preloadCount).map(image => {
-          const screenWidth = window.innerWidth;
-          const screenHeight = window.innerHeight;
-          const devicePixelRatio = window.devicePixelRatio || 1;
-          const maxWidth = Math.min(screenWidth * devicePixelRatio, 2400);
-          const maxHeight = Math.min(screenHeight * devicePixelRatio, 1600);
-          
-          return buildCloudinaryUrl(image.src, { 
-            width: Math.floor(maxWidth),
-            height: Math.floor(maxHeight),
-            quality: 'auto:best',
-            format: 'auto',
-            crop: 'fit'
-          });
-        });
-        
-        // Preload lightbox images in background
-        setTimeout(async () => {
-          await preloadImageBatch(lightboxUrls, (loaded, total) => {
-            console.log(`Lightbox preload: ${loaded}/${total}`);
-          });
-          console.log('Initial lightbox images preloaded');
-        }, strategy === 'aggressive' ? 200 : 1000);
-      }
-      
-      // Lightbox function with progressive loading
-      function openLightbox(index) {
-        const lightbox = document.getElementById('lightbox');
-        const image = document.getElementById('lightbox-image');
-        const counter = document.getElementById('lightbox-counter');
-        
-        if (!lightbox || !image || !counter || !portfolioImages[index]) {
-          return;
-        }
-
-        currentImageIndex = index;
-        
-        // Show lightbox with proper z-index and prevent scrolling
-        lightbox.classList.remove('hidden');
-        lightbox.style.zIndex = '9999';
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden'; // Also prevent html scroll
-        
-        const currentImage = portfolioImages[index];
-        
-        // First load a low-quality placeholder for instant feedback
-        const placeholderUrl = buildCloudinaryUrl(currentImage.src, { 
-          width: 50,
-          quality: 30,
-          blur: 15
-        });
-        
-        // Load optimized Cloudinary image for lightbox based on screen size
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-        const maxWidth = Math.min(screenWidth * window.devicePixelRatio, 1400); // Cap at 1400px
-        const maxHeight = Math.min(screenHeight * window.devicePixelRatio, 900); // Cap at 900px
-        
-        const lightboxUrl = buildCloudinaryUrl(currentImage.src, { 
-          width: Math.floor(maxWidth),
-          height: Math.floor(maxHeight),
-          quality: 'auto:good',
-          format: 'auto',
-          crop: 'fit'
-        });
-        
-        // Show blurred placeholder first
-        image.src = placeholderUrl;
-        image.alt = currentImage.alt;
-        image.style.opacity = '0.7';
-        image.style.filter = 'blur(5px)';
-        
-        // Then load the high-quality image
-        const highQualityImg = new Image();
-        highQualityImg.onload = function() {
-          image.src = lightboxUrl;
-          image.style.opacity = '1';
-          image.style.filter = 'none';
-        };
-        highQualityImg.src = lightboxUrl;
-        
-        // Update counter (removed title display)
-        counter.textContent = `${index + 1} / ${portfolioImages.length}`;
-        
-        // Update navigation buttons
-        updateLightboxNavigation();
-        
-        // Preload adjacent images for smoother navigation
-        preloadAdjacentImages(index);
-        
-        // Focus on lightbox for keyboard navigation
-        lightbox.focus();
-      }      // Enhanced preloading function for smoother navigation
-      async function preloadAdjacentImages(currentIndex) {
-        const strategy = getPreloadingStrategy();
-        const preloadIndices = [
-          currentIndex - 1, // Previous image
-          currentIndex + 1  // Next image
-        ].filter(index => index >= 0 && index < portfolioImages.length);
-        
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-        const devicePixelRatio = window.devicePixelRatio || 1;
-        const maxWidth = Math.min(screenWidth * devicePixelRatio, strategy === 'aggressive' ? 2400 : 1800);
-        const maxHeight = Math.min(screenHeight * devicePixelRatio, strategy === 'aggressive' ? 1600 : 1200);
-        
-        const preloadUrls = preloadIndices.map(index => {
-          return buildCloudinaryUrl(portfolioImages[index].src, { 
-            width: Math.floor(maxWidth),
-            height: Math.floor(maxHeight),
-            quality: 'auto:best',
-            format: 'auto',
-            crop: 'fit'
-          });
-        });
-        
-        // Preload without blocking
-        preloadImageBatch(preloadUrls, (loaded, total) => {
-          console.log(`Adjacent images: ${loaded}/${total} preloaded`);
-        }).catch(console.warn);
-      }
-      
-      
-      function updateLightboxNavigation() {
-        const prevBtn = document.getElementById('lightbox-prev');
-        const nextBtn = document.getElementById('lightbox-next');
-        
-        if (prevBtn) {
-          prevBtn.style.display = currentImageIndex === 0 ? 'none' : 'block';
-        }
-        if (nextBtn) {
-          nextBtn.style.display = currentImageIndex === portfolioImages.length - 1 ? 'none' : 'block';
-        }
-      }
-      
-      function nextImage() {
-        if (currentImageIndex < portfolioImages.length - 1) {
-          openLightbox(currentImageIndex + 1);
-        }
-      }
-      
-      function prevImage() {
-        if (currentImageIndex > 0) {
-          openLightbox(currentImageIndex - 1);
-        }
-      }
-      
-      function closeLightbox() {
-        const lightbox = document.getElementById('lightbox');
-        if (lightbox) {
-          lightbox.classList.add('hidden');
-          lightbox.style.zIndex = '';
-          document.body.style.overflow = '';
-          document.documentElement.style.overflow = ''; // Restore html scroll
-        }
-      }
-      
-      function downloadCurrentImage() {
-        if (currentImageIndex < 0 || currentImageIndex >= portfolioImages.length) return;
-        
-        const currentImage = portfolioImages[currentImageIndex];
-        console.log('Downloading image:', currentImage);
-        
-        // Generate high-quality download URL without size restrictions
-        const downloadUrl = buildCloudinaryUrl(currentImage.src, {
-          quality: 'auto:best',
-          format: 'jpg'
-          // No width/height = original size
-        });
-        
-        console.log('Download URL:', downloadUrl);
-        
-        // Create filename - sanitize for file system
-        let filename = (currentImage.title || currentImage.alt || 'image')
-          .replace(/[^a-z0-9]/gi, '_')  // Replace non-alphanumeric with underscore
-          .replace(/_+/g, '_')          // Replace multiple underscores with single
-          .replace(/^_|_$/g, '');       // Remove leading/trailing underscores
-        filename = filename || 'image'; // Fallback if empty
-        filename += '.jpg';
-        
-        // Show user feedback
-        const downloadBtn = document.getElementById('lightbox-download');
-        const originalHTML = downloadBtn ? downloadBtn.innerHTML : '';
-        if (downloadBtn) {
-          downloadBtn.innerHTML = '<svg class="w-8 h-8 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-          downloadBtn.disabled = true;
-        }
-        
-        // Use fetch with better error handling and CORS support
-        fetch(downloadUrl, {
-          method: 'GET',
-          mode: 'cors',
-          cache: 'no-cache'
-        })
-          .then(response => {
-            console.log('Fetch response:', response.status, response.statusText);
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.blob();
-          })
-          .then(blob => {
-            console.log('Blob created:', blob.size, 'bytes', blob.type);
-            
-            // Create object URL from blob
-            const url = window.URL.createObjectURL(blob);
-            
-            // Create temporary link and trigger download
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            link.style.display = 'none';
-            
-            // Add link to DOM temporarily
-            document.body.appendChild(link);
-            
-            // Trigger download
-            link.click();
-            
-            // Clean up
-            document.body.removeChild(link);
-            
-            // Clean up object URL after a short delay
-            setTimeout(() => {
-              window.URL.revokeObjectURL(url);
-            }, 1000);
-            
-            console.log('Download triggered successfully');
-          })
-          .catch(error => {
-            console.error('Download failed:', error);
-            
-            // Fallback 1: Try direct download without fetch
-            try {
-              const link = document.createElement('a');
-              link.href = downloadUrl;
-              link.download = filename;
-              link.target = '_blank';
-              link.rel = 'noopener noreferrer';
-              
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              
-              console.log('Fallback download triggered');
-            } catch (fallbackError) {
-              console.error('Fallback download also failed:', fallbackError);
-              
-              // Fallback 2: Open in new window
-              window.open(downloadUrl, '_blank');
-            }
-          })
-          .finally(() => {
-            // Restore button state
-            if (downloadBtn && originalHTML) {
-              setTimeout(() => {
-                downloadBtn.innerHTML = originalHTML;
-                downloadBtn.disabled = false;
-              }, 1500);
-            }
-          });
-      }
-      
-      // Set up lightbox navigation
-      let currentImageIndex = 0;
-      
-      // Close button
-      const closeBtn = document.getElementById('lightbox-close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closeLightbox);
-      }
-      
-      // Download button
-      const downloadBtn = document.getElementById('lightbox-download');
-      if (downloadBtn) {
-        downloadBtn.addEventListener('click', downloadCurrentImage);
-      }
-      
-      // Navigation buttons
-      const prevBtn = document.getElementById('lightbox-prev');
-      if (prevBtn) {
-        prevBtn.addEventListener('click', prevImage);
-      }
-      
-      const nextBtn = document.getElementById('lightbox-next');
-      if (nextBtn) {
-        nextBtn.addEventListener('click', nextImage);
-      }
-      
-      // Keyboard navigation
-      document.addEventListener('keydown', function(e) {
-        const lightbox = document.getElementById('lightbox');
-        if (!lightbox || lightbox.classList.contains('hidden')) return;
-        
-        // Prevent default behavior for arrow keys
-        if (['ArrowLeft', 'ArrowRight', 'Escape'].includes(e.key)) {
-          e.preventDefault();
-        }
-        
-        switch(e.key) {
-          case 'Escape':
-            closeLightbox();
-            break;
-          case 'ArrowLeft':
-          case 'a':
-          case 'A':
-            prevImage();
-            break;
-          case 'ArrowRight':
-          case 'd':
-          case 'D':
-            nextImage();
-            break;
-          case 'Enter':
-          case 's':
-          case 'S':
-            downloadCurrentImage();
-            break;
-        }
-      });
-      
-      // Click outside to close
-      const lightbox = document.getElementById('lightbox');
-      if (lightbox) {
-        lightbox.addEventListener('click', function(e) {
-          // Only close if clicking on the lightbox background, not on the content
-          if (e.target === lightbox) {
-            closeLightbox();
-          }
-        });
-        
-        // Touch/swipe support for mobile
-        let startX = null;
-        let startY = null;
-        
-        lightbox.addEventListener('touchstart', function(e) {
-          startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY;
-        }, { passive: true });
-        
-        lightbox.addEventListener('touchend', function(e) {
-          if (!startX || !startY) return;
-          
-          const endX = e.changedTouches[0].clientX;
-          const endY = e.changedTouches[0].clientY;
-          
-          const deltaX = endX - startX;
-          const deltaY = endY - startY;
-          
-          // Only handle horizontal swipes (ignore vertical scrolling)
-          if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-            if (deltaX > 0) {
-              // Swipe right - previous image
-              prevImage();
-            } else {
-              // Swipe left - next image  
-              nextImage();
-            }
-          }
-          
-          startX = null;
-          startY = null;
-        }, { passive: true });
-      }
-      
-      // Initialize gallery
-      displayImages();
     });
   </script>
 
