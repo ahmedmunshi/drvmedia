@@ -7,7 +7,7 @@ export default defineConfig({
   integrations: [tailwind()],
   output: 'hybrid',
   adapter: netlify(),
-  site: 'https://lateoptics.netlify.app',
+  site: 'https://ahmedmunshi.com',
   compressHTML: true,
   build: {
     inlineStylesheets: 'never',
