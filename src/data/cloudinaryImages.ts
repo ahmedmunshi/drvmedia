@@ -484,5 +484,233 @@ export const cloudinaryGalleryImages = [
     alt: 'Automotive shot 5846',
     title: 'Auto 5846',
     category: 'automotive'
+  },
+  {
+    src: '_MG_0544_s21n4u',
+    alt: 'Automotive shot MG 0544',
+    title: 'Auto MG 0544',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0518_ik9qfh',
+    alt: 'Automotive shot MG 0518',
+    title: 'Auto MG 0518',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0326_gkq54a',
+    alt: 'Automotive shot MG 0326',
+    title: 'Auto MG 0326',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0368_qduug7',
+    alt: 'Automotive shot MG 0368',
+    title: 'Auto MG 0368',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0542_of1jos',
+    alt: 'Automotive shot MG 0542',
+    title: 'Auto MG 0542',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0365_yzmcee',
+    alt: 'Automotive shot MG 0365',
+    title: 'Auto MG 0365',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0107_mi7xth',
+    alt: 'Automotive shot MG 0107',
+    title: 'Auto MG 0107',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0217_au7p2m',
+    alt: 'Automotive shot MG 0217',
+    title: 'Auto MG 0217',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0094_kzawqk',
+    alt: 'Automotive shot MG 0094',
+    title: 'Auto MG 0094',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0406-2_y9owka',
+    alt: 'Automotive shot MG 0406-2',
+    title: 'Auto MG 0406-2',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0269-2_hgg0ts',
+    alt: 'Automotive shot MG 0269-2',
+    title: 'Auto MG 0269-2',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_0454-2_gxxogi',
+    alt: 'Automotive shot MG 0454-2',
+    title: 'Auto MG 0454-2',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9824-2_asgews',
+    alt: 'Automotive shot MG 9824-2',
+    title: 'Auto MG 9824-2',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9851_cv9t9s',
+    alt: 'Automotive shot MG 9851',
+    title: 'Auto MG 9851',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9857_sdud6w',
+    alt: 'Automotive shot MG 9857',
+    title: 'Auto MG 9857',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9863_ou0ndn',
+    alt: 'Automotive shot MG 9863',
+    title: 'Auto MG 9863',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9332_zjizpo',
+    alt: 'Automotive shot MG 9332',
+    title: 'Auto MG 9332',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9354_boldcr',
+    alt: 'Automotive shot MG 9354',
+    title: 'Auto MG 9354',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9304_gp1j4v',
+    alt: 'Automotive shot MG 9304',
+    title: 'Auto MG 9304',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9276_luaqpw',
+    alt: 'Automotive shot MG 9276',
+    title: 'Auto MG 9276',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9382_zc5zbu',
+    alt: 'Automotive shot MG 9382',
+    title: 'Auto MG 9382',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9370_ph61mi',
+    alt: 'Automotive shot MG 9370',
+    title: 'Auto MG 9370',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9297_qsuya6',
+    alt: 'Automotive shot MG 9297',
+    title: 'Auto MG 9297',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9355_vsh0lo',
+    alt: 'Automotive shot MG 9355',
+    title: 'Auto MG 9355',
+    category: 'automotive'
+  },
+  {
+    src: '_MG_9308_ev5qve',
+    alt: 'Automotive shot MG 9308',
+    title: 'Auto MG 9308',
+    category: 'automotive'
+  },
+  {
+    src: '_DSC0757_bushys',
+    alt: 'Automotive shot DSC 0757',
+    title: 'Auto DSC 0757',
+    category: 'automotive'
+  },
+  {
+    src: '_DSC0772_w9kv1v',
+    alt: 'Automotive shot DSC 0772',
+    title: 'Auto DSC 0772',
+    category: 'automotive'
+  },
+  {
+    src: '_DSC0778_xq2y4i',
+    alt: 'Automotive shot DSC 0778',
+    title: 'Auto DSC 0778',
+    category: 'automotive'
+  },
+  {
+    src: '_DSC0766_jkm9es',
+    alt: 'Automotive shot DSC 0766',
+    title: 'Auto DSC 0766',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_6543_bzwevg',
+    alt: 'Automotive shot 6543',
+    title: 'Auto 6543',
+    category: 'automotive'
+  },
+  {
+    src: 'gt3rs-rimgold_wrlaa2',
+    alt: 'GT3RS with gold rims alternate',
+    title: 'GT3RS Gold Rims Alt',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_6097_em42sw',
+    alt: 'Automotive shot 6097 alternate',
+    title: 'Auto 6097 Alt',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_4398_w6xxmj',
+    alt: 'Automotive shot 4398 alternate',
+    title: 'Auto 4398 Alt',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5296_fzhcnk',
+    alt: 'Automotive shot 5296 alternate',
+    title: 'Auto 5296 Alt',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_5319_aritxa',
+    alt: 'Automotive shot 5319 alternate',
+    title: 'Auto 5319 Alt',
+    category: 'automotive'
+  },
+  {
+    src: 'car-1_s1norz',
+    alt: 'Car photography sample alternate',
+    title: 'Car Sample Alt',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_4308_b4rv3i',
+    alt: 'Automotive shot 4308 alternate',
+    title: 'Auto 4308 Alt',
+    category: 'automotive'
+  },
+  {
+    src: 'IMG_4395_odru1d',
+    alt: 'Automotive shot 4395 alternate',
+    title: 'Auto 4395 Alt',
+    category: 'automotive'
   }
 ];
