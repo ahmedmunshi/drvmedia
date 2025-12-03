@@ -33,7 +33,7 @@ export function buildCloudinaryUrl(
   const baseUrl = `https://res.cloudinary.com/${cloudName}/image/upload`
   
   const transformations = [
-    options.format || 'f_auto',
+    options.format ? `f_${options.format}` : 'f_auto',
     options.quality ? `q_${options.quality}` : 'q_auto:good',
     options.width ? `w_${options.width}` : null,
     options.height ? `h_${options.height}` : null,
