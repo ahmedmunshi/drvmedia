@@ -1,14 +1,14 @@
-# LateOptics - Professional Automotive Photography Portfolio
+# DRVMedia - Professional Automotive Photography Portfolio
 
-**LateOptics** (Late Optics) - A minimalistic, responsive automotive photography portfolio website showcasing professional car photography, automotive art, and creative automotive visuals. Built with Astro and Tailwind CSS.
+**DRVMedia** (DRV Media) - A minimalistic, responsive automotive photography portfolio website showcasing professional car photography, automotive art, and creative automotive visuals. Built with Astro and Tailwind CSS.
 
-## 🚗 About LateOptics
+## 🚗 About DRVMedia
 
-LateOptics specializes in professional automotive photography, capturing the essence and beauty of vehicles through artistic and creative photography. Our portfolio features a diverse collection of automotive photography including high-end car photography, creative automotive compositions, and professional automotive art.
+DRVMedia specializes in professional automotive photography, capturing the essence and beauty of vehicles through artistic and creative photography. Our portfolio features a diverse collection of automotive photography including high-end car photography, creative automotive compositions, and professional automotive art.
 
 ## 🌐 Live Website
 
-Visit **LateOptics** at: [https://lateoptics.netlify.app](https://lateoptics.netlify.app)
+Visit **DRVMedia** at: [https://drv-media.netlify.app](https://drv-media.netlify.app)
 
 ## 🚀 Features
 

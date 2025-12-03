@@ -8,8 +8,8 @@ export const serverConfig = {
     apiSecret: import.meta.env.CLOUDINARY_API_SECRET,
   },
   site: {
-    url: import.meta.env.SITE_URL || 'https://lateoptics.netlify.app',
-    title: import.meta.env.SITE_TITLE || 'lateoptics',
+    url: import.meta.env.SITE_URL || 'https://drv-media.netlify.app',
+    title: import.meta.env.SITE_TITLE || 'drvmedia',
     description: import.meta.env.SITE_DESCRIPTION || 'Photography Portfolio',
   },
   contact: {
@@ -33,8 +33,8 @@ export const clientConfig = {
     // Note: API keys should NOT be exposed to client
   },
   site: {
-    url: import.meta.env.SITE_URL || 'https://lateoptics.netlify.app',
-    title: import.meta.env.SITE_TITLE || 'lateoptics',
+    url: import.meta.env.SITE_URL || 'https://drv-media.netlify.app',
+    title: import.meta.env.SITE_TITLE || 'drvmedia',
     description: import.meta.env.SITE_DESCRIPTION || 'Photography Portfolio',
   },
   analytics: {

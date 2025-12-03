@@ -8,14 +8,14 @@ export interface Props {
 }
 
 const { 
-  title = "Late Optics - Professional Automotive Photography", 
-  description = "LateO ptics professional automotive photography portfolio featuring stunning car photography, automotive art, and creative automotive visuals.",
-  keywords = "Late Optics, automotive photography, car photography, professional automotive photographer, automotive art, car photos, automotive visuals, late optics photography",
+  title = "DRV Media - Professional Automotive Photography", 
+  description = "DRV Media professional automotive photography portfolio featuring stunning car photography, automotive art, and creative automotive visuals.",
+  keywords = "DRV Media, drvmedia, automotive photography, car photography, professional automotive photographer, automotive art, car photos, automotive visuals",
   ogImage = "/image.png",
   canonical = Astro.url.href
 } = Astro.props;
 
-const siteUrl = Astro.site || 'https://lateoptics.netlify.app';
+const siteUrl = Astro.site || 'https://drv-media.netlify.app';
 ---
 
 <!DOCTYPE html>
@@ -28,13 +28,13 @@ const siteUrl = Astro.site || 'https://lateoptics.netlify.app';
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
-    <meta name="author" content="LateOptics" />
+    <meta name="author" content="DRVMedia" />
     <link rel="canonical" href={canonical} />
     
     <!-- Brand Recognition -->
-    <meta name="brand" content="LateOptics" />
-    <meta name="application-name" content="LateOptics" />
-    <meta name="apple-mobile-web-app-title" content="LateOptics" />
+    <meta name="brand" content="DRVMedia" />
+    <meta name="application-name" content="DRVMedia" />
+    <meta name="apple-mobile-web-app-title" content="DRVMedia" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -42,7 +42,7 @@ const siteUrl = Astro.site || 'https://lateoptics.netlify.app';
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(ogImage, siteUrl)} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="LateOptics" />
+    <meta property="og:site_name" content="DRVMedia" />
     <meta property="og:locale" content="en_US" />
     
     <!-- Twitter Card -->
@@ -50,8 +50,8 @@ const siteUrl = Astro.site || 'https://lateoptics.netlify.app';
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, siteUrl)} />
-    <meta name="twitter:site" content="@lateoptics" />
-    <meta name="twitter:creator" content="@lateoptics" />
+    <meta name="twitter:site" content="@drvmedia" />
+    <meta name="twitter:creator" content="@drvmedia" />
     
     <!-- Business Information -->
     <meta name="business:contact_data:locality" content="Photography" />
@@ -63,13 +63,13 @@ const siteUrl = Astro.site || 'https://lateoptics.netlify.app';
       {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "LateOptics",
-        "alternateName": "Late Optics",
+        "name": "DRVMedia",
+        "alternateName": "DRV Media",
         "url": "{siteUrl}",
         "logo": "{new URL('/image.png', siteUrl)}",
         "sameAs": [
-          "https://instagram.com/lateoptics",
-          "https://twitter.com/lateoptics"
+          "https://instagram.com/drvmedia",
+          "https://twitter.com/drvmedia"
         ],
         "contactPoint": {
           "@type": "ContactPoint",

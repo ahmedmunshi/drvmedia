@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🔧 Setting up environment variables for lateoptics portfolio..."
+echo "🔧 Setting up environment variables for drvmedia portfolio..."
 echo ""
 
 # Check if .env already exists
