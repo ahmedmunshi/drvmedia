@@ -8,7 +8,7 @@ const seoTitle = "drvmedia - Professional Automotive Photography";
 const seoDescription = "drvmedia's professional photography portfolio featuring automotive photography, portraits, and creative visuals. Explore a diverse collection of stunning photography work.";
 const seoKeywords = "drvmedia, photographer, automotive photography, portrait photography, professional photographer, photography portfolio, creative photography";
 
-const featuredImages = cloudinaryGalleryImages.slice(0, 6);
+const featuredImages = cloudinaryGalleryImages.slice(0, 7);
 ---
 
 <Layout 
@@ -20,20 +20,20 @@ const featuredImages = cloudinaryGalleryImages.slice(0, 6);
   <Header />
   
   <main class="min-h-screen">
-    <section class="pt-32 lg:pt-40 pb-16 lg:pb-24 px-4 sm:px-6 lg:px-8">
+    <section class="pt-24 lg:pt-40 pb-12 lg:pb-24 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-12 gap-8 lg:gap-16 items-start">
-          <div class="col-span-12 lg:col-span-7 space-y-8">
+          <div class="col-span-12 lg:col-span-7 space-y-6 lg:space-y-8">
             <div>
-              <h1 class="text-5xl lg:text-7xl font-thin text-gray-900 mb-6 leading-tight" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.02em;">
+              <h1 class="text-3xl lg:text-7xl font-thin text-gray-900 mb-3 lg:mb-6 leading-tight" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.02em;">
                 Cars. Camera.<br/>Done Right.
               </h1>
               
-              <p class="text-xl lg:text-2xl text-gray-600 font-thin leading-relaxed mb-8" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.01em;">
+              <p class="text-base lg:text-2xl text-gray-600 font-thin leading-relaxed mb-6 lg:mb-8" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.01em;">
                 Automotive photos that do your build justice.
               </p>
               
-              <div class="flex flex-col sm:flex-row gap-4 mb-12">
+              <div class="flex flex-col sm:flex-row gap-4 mb-8 lg:mb-12">
                 <a 
                   href="/booking" 
                   class="px-8 py-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-lg font-thin tracking-wide shadow-sm hover:shadow-md"
@@ -51,20 +51,20 @@ const featuredImages = cloudinaryGalleryImages.slice(0, 6);
               </div>
             </div>
             
-            <div class="space-y-6 pt-8 border-t border-gray-200">
+            <div class="space-y-6 pt-6 lg:pt-8 border-t border-gray-200">
               <h2 class="text-2xl lg:text-3xl font-thin text-gray-900" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.02em;">
                 What We Do
               </h2>
               
               <div class="space-y-4 text-gray-600 text-lg leading-relaxed" style="font-family: 'Poppins', sans-serif; font-weight: 200;">
                 <p>
-                  We shoot cars. Builds, classics, track monsters—whatever you've got.
+                  We shoot cars. Builds, classics, track monsters, whatever you've got.
                 </p>
                 <p>
                   Working with enthusiasts, collectors, and anyone who cares about their ride and wants photos that actually capture it.
                 </p>
                 <p>
-                  Whether you need shots for Instagram, prints for the wall, or content for a campaign, we'll make it happen.
+                  Whether you need media and social management, prints for the wall, or content for a campaign, we'll make it happen.
                 </p>
               </div>
             </div>
@@ -73,26 +73,28 @@ const featuredImages = cloudinaryGalleryImages.slice(0, 6);
           <div class="col-span-12 lg:col-span-5 space-y-6">
             <div class="relative overflow-hidden rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300">
               <img 
-                src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_800,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[0].src}`}
-                alt={featuredImages[0].alt}
+                src="https://res.cloudinary.com/dqrj6xsjs/image/upload/w_800,q_auto:good,f_auto,c_fill,g_auto/_MG_9304_gp1j4v"
+                alt="Automotive shot MG 9304"
                 class="w-full h-auto object-cover"
                 loading="eager"
               />
             </div>
             
             <div class="grid grid-cols-2 gap-4">
-              <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <img 
-                  src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[1].src}`}
-                  alt={featuredImages[1].alt}
-                  class="w-full h-auto object-cover"
-                  loading="lazy"
-                />
+              <div class="space-y-4">
+                <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                  <img 
+                    src="https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/_MG_9354_boldcr"
+                    alt="Automotive shot MG 9354"
+                    class="w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                </div>
               </div>
               <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[2].src}`}
-                  alt={featuredImages[2].alt}
+                  src="https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/_MG_9276_luaqpw"
+                  alt="Automotive shot MG 9276"
                   class="w-full h-auto object-cover"
                   loading="lazy"
                 />
@@ -105,8 +107,8 @@ const featuredImages = cloudinaryGalleryImages.slice(0, 6);
           <div class="col-span-12 lg:col-span-5 order-2 lg:order-1">
             <div class="relative overflow-hidden rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300">
               <img 
-                src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_800,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[3].src}`}
-                alt={featuredImages[3].alt}
+                src="https://res.cloudinary.com/dqrj6xsjs/image/upload/w_800,q_auto:good,f_auto,c_fill,g_auto/_MG_0326_gkq54a"
+                alt="Automotive shot MG 0326"
                 class="w-full h-auto object-cover"
                 loading="lazy"
               />
@@ -115,16 +117,16 @@ const featuredImages = cloudinaryGalleryImages.slice(0, 6);
             <div class="grid grid-cols-2 gap-4 mt-6">
               <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[4].src}`}
-                  alt={featuredImages[4].alt}
+                  src="https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/_MG_0518_ik9qfh"
+                  alt="Automotive shot MG 0518"
                   class="w-full h-auto object-cover"
                   loading="lazy"
                 />
               </div>
               <div class="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={`https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/${featuredImages[5].src}`}
-                  alt={featuredImages[5].alt}
+                  src="https://res.cloudinary.com/dqrj6xsjs/image/upload/w_400,q_auto:good,f_auto,c_fill,g_auto/_MG_0544_s21n4u"
+                  alt="Automotive shot MG 0544"
                   class="w-full h-auto object-cover"
                   loading="lazy"
                 />
@@ -142,10 +144,7 @@ const featuredImages = cloudinaryGalleryImages.slice(0, 6);
                 Every shoot is different. We figure out what you're going for, find the right spot, and get it done.
               </p>
               <p>
-                Good lighting, solid angles, clean edits. No over-the-top filters or fake drama—just photos that look like your car actually does.
-              </p>
-              <p>
-                Need social media content? Print-quality shots? Marketing materials? Let us know and we'll deliver what works for you.
+                Good lighting, solid angles, clean edits. We make your car look like its supposed to.
               </p>
             </div>
             

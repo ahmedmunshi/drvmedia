@@ -41,9 +41,9 @@ export const cloudinaryGalleryImages = [
     category: 'automotive'
   },
   {
-    src: 'champ-nsx2_kjp7ef',
-    alt: 'Champagne NSX secondary angle',
-    title: 'Champagne NSX Alt',
+    src: '_DSC0778_xq2y4i',
+    alt: 'Automotive shot DSC 0778',
+    title: 'Auto DSC 0778',
     category: 'automotive'
   },
   {
