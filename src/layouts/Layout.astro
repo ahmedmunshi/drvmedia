@@ -9,13 +9,82 @@ export interface Props {
 
 const { 
   title = "DRV Media - Professional Automotive Photography", 
-  description = "DRV Media professional automotive photography portfolio featuring stunning car photography, automotive art, and creative automotive visuals.",
-  keywords = "DRV Media, drvmedia, automotive photography, car photography, professional automotive photographer, automotive art, car photos, automotive visuals",
-  ogImage = "/image.png",
+  description = "DRV Media professional automotive photography and videography services in Lusaka, Zambia. Stunning car photography, automotive content, and creative visuals.",
+  keywords = "DRV Media, drvmedia, automotive photography, car photography, Lusaka photographer, Zambia automotive photography, car videography, automotive content",
+  ogImage = "/newlogo-dark.png",
   canonical = Astro.url.href
 } = Astro.props;
 
-const siteUrl = Astro.site || 'https://drv-media.netlify.app';
+const siteUrl = Astro.site?.toString() || 'https://drv-media.netlify.app';
+const ogImageUrl = new URL(ogImage, siteUrl).toString();
+const logoUrl = new URL('/newlogo-dark.png', siteUrl).toString();
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "DRV Media",
+  "alternateName": "DRVMedia",
+  "url": siteUrl,
+  "logo": logoUrl,
+  "image": logoUrl,
+  "description": "Professional automotive photography and videography services specializing in car photography, automotive content, and creative visuals.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Lusaka",
+    "addressCountry": "ZM"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -15.3875,
+    "longitude": 28.3228
+  },
+  "priceRange": "$$",
+  "telephone": "",
+  "email": "info@drv-media.com",
+  "sameAs": [
+    "https://instagram.com/drvmedia"
+  ],
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    "opens": "08:00",
+    "closes": "18:00"
+  },
+  "serviceArea": {
+    "@type": "Place",
+    "name": "Lusaka, Zambia"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Automotive Photography Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Creative Car Photography",
+          "description": "Professional automotive photo shoots with cinematic editing"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Automotive Videography",
+          "description": "Cinematic car videos and reels for social media"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Inventory Photography",
+          "description": "Professional dealership and inventory photography"
+        }
+      }
+    ]
+  }
+};
 ---
 
 <!DOCTYPE html>
@@ -28,57 +97,39 @@ const siteUrl = Astro.site || 'https://drv-media.netlify.app';
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
-    <meta name="author" content="DRVMedia" />
+    <meta name="author" content="DRV Media" />
     <link rel="canonical" href={canonical} />
     
+    <!-- Geographic Targeting -->
+    <meta name="geo.region" content="ZM-09" />
+    <meta name="geo.placename" content="Lusaka" />
+    <meta name="geo.position" content="-15.3875;28.3228" />
+    <meta name="ICBM" content="-15.3875, 28.3228" />
+    
     <!-- Brand Recognition -->
-    <meta name="brand" content="DRVMedia" />
-    <meta name="application-name" content="DRVMedia" />
-    <meta name="apple-mobile-web-app-title" content="DRVMedia" />
+    <meta name="brand" content="DRV Media" />
+    <meta name="application-name" content="DRV Media" />
+    <meta name="apple-mobile-web-app-title" content="DRV Media" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, siteUrl)} />
+    <meta property="og:image" content={ogImageUrl} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="DRVMedia" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="DRV Media" />
+    <meta property="og:locale" content="en_ZM" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage, siteUrl)} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <meta name="twitter:site" content="@drvmedia" />
     <meta name="twitter:creator" content="@drvmedia" />
     
-    <!-- Business Information -->
-    <meta name="business:contact_data:locality" content="Photography" />
-    <meta name="business:contact_data:region" content="Automotive" />
-    <meta name="business:contact_data:country_name" content="Professional" />
-    
     <!-- Schema.org structured data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "DRVMedia",
-        "alternateName": "DRV Media",
-        "url": "{siteUrl}",
-        "logo": "{new URL('/image.png', siteUrl)}",
-        "sameAs": [
-          "https://instagram.com/drvmedia",
-          "https://twitter.com/drvmedia"
-        ],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "customer service",
-          "availableLanguage": "en"
-        },
-        "description": "Professional automotive photography services specializing in stunning car photography and automotive art."
-      }
-    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
     
     <!-- Icons and Manifest -->
     <link rel="icon" type="image/png" href="/mediaagency.png" />

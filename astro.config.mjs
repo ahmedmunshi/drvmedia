@@ -7,7 +7,7 @@ export default defineConfig({
   integrations: [tailwind()],
   output: 'hybrid',
   adapter: netlify(),
-  site: 'https://ahmedmunshi.com',
+  site: 'https://drv-media.netlify.app',
   compressHTML: true,
   build: {
     inlineStylesheets: 'never',
