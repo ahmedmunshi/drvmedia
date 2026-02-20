@@ -17,62 +17,78 @@ const currentPath = Astro.url.pathname;
         <div class="flex items-baseline space-x-8">
           <a 
             href="/gallery" 
-            class={`px-3 py-2 rounded-md text-sm font-thin tracking-wide transition-colors ${
+            class={`px-3 py-2 rounded-md text-sm tracking-wide transition-colors ${
               currentPath === '/gallery' 
                 ? 'text-gray-900 bg-gray-100' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
-            style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+            style="font-family: 'Poppins', sans-serif; font-weight: 300; letter-spacing: 0.04em;"
           >
             Gallery
           </a>
           <a 
             href="/about" 
-            class={`px-3 py-2 rounded-md text-sm font-thin tracking-wide transition-colors ${
+            class={`px-3 py-2 rounded-md text-sm tracking-wide transition-colors ${
               currentPath === '/about' 
                 ? 'text-gray-900 bg-gray-100' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
-            style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+            style="font-family: 'Poppins', sans-serif; font-weight: 300; letter-spacing: 0.04em;"
           >
             About
           </a>
+
         </div>
         
         <!-- Desktop Book Session button -->
         <div class="flex items-center space-x-4">
           <button 
             id="connect-btn"
-            class="px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md text-sm font-thin transition-colors tracking-wide"
-            style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+            class="px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md text-sm transition-colors tracking-wide"
+            style="font-family: 'Poppins', sans-serif; font-weight: 300; letter-spacing: 0.04em;"
           >
             Connect
           </button>
           <a 
-            href="/booking"
-            class="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-thin hover:bg-gray-800 transition-colors tracking-wide"
-            style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+            href="/pricing"
+            class="px-4 py-2 bg-accent-500 text-white rounded-md text-sm hover:bg-gray-900 transition-colors tracking-wide"
+            style="font-family: 'Poppins', sans-serif; font-weight: 300; letter-spacing: 0.04em;"
           >
-            Book Session
+            Get a Quote
           </a>
         </div>
       </div>
       
-      <!-- Mobile Book Session button - Always visible on mobile -->
-      <div class="md:hidden flex items-center space-x-2">
-        <button 
-          id="connect-btn-mobile"
-          class="px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md text-sm font-thin transition-colors tracking-wide"
-          style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
-        >
-          Connect
-        </button>
+      <!-- Mobile Navigation - Visible only on mobile -->
+      <div class="md:hidden flex items-center space-x-1">
         <a 
-          href="/booking"
-          class="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-thin hover:bg-gray-800 transition-colors tracking-wide"
-          style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;"
+          href="/gallery" 
+          class={`px-2 py-1.5 rounded-md text-xs tracking-wide transition-colors ${
+            currentPath === '/gallery' 
+              ? 'text-gray-900 bg-gray-100' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+          style="font-family: 'Poppins', sans-serif; font-weight: 300;"
         >
-          Book
+          Gallery
+        </a>
+        <a 
+          href="/about" 
+          class={`px-2 py-1.5 rounded-md text-xs tracking-wide transition-colors ${
+            currentPath === '/about' 
+              ? 'text-gray-900 bg-gray-100' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+          style="font-family: 'Poppins', sans-serif; font-weight: 300;"
+        >
+          About
+        </a>
+        <a 
+          href="/pricing"
+          class="ml-1 px-3 py-1.5 bg-accent-500 text-white rounded-md text-xs hover:bg-gray-900 transition-colors tracking-wide"
+          style="font-family: 'Poppins', sans-serif; font-weight: 300;"
+        >
+          Quote
         </a>
       </div>
     </div>
@@ -84,7 +100,7 @@ const currentPath = Astro.url.pathname;
 <div id="connect-sidebar" class="fixed right-0 top-0 w-80 max-w-[80vw] h-full bg-white z-[110] transform translate-x-full transition-transform duration-300 shadow-2xl">
   <div class="p-6 pt-24">
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-thin text-gray-900 tracking-wide" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.06em;">Let's Connect</h2>
+      <h2 class="text-xl text-gray-900 tracking-wide" style="font-family: 'Poppins', sans-serif; font-weight: 300; letter-spacing: 0.04em;">Let's Connect</h2>
       <button id="connect-close" class="p-1 hover:bg-gray-100 rounded">
         <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -113,7 +129,7 @@ const currentPath = Astro.url.pathname;
       </a>
       
       <a 
-        href="mailto:info@drv-media.com"
+        href="mailto:ahmed@drv-media.com"
         class="group flex items-center p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
       >
         <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3 group-hover:bg-gray-200 transition-colors">
@@ -123,7 +139,7 @@ const currentPath = Astro.url.pathname;
         </div>
         <div class="flex-1 min-w-0">
           <div class="font-medium text-gray-900 text-sm mb-0.5" style="font-family: 'Poppins', sans-serif;">Email</div>
-          <div class="text-sm text-gray-600 truncate" style="font-family: 'Poppins', sans-serif;">info@drv-media.com</div>
+          <div class="text-sm text-gray-600 truncate" style="font-family: 'Poppins', sans-serif;">ahmed@drv-media.com</div>
         </div>
         <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -191,7 +207,6 @@ const currentPath = Astro.url.pathname;
     
     // Connect sidebar functionality
     const connectBtn = document.getElementById('connect-btn');
-    const connectBtnMobile = document.getElementById('connect-btn-mobile');
     const connectSidebar = document.getElementById('connect-sidebar');
     const connectOverlay = document.getElementById('connect-overlay');
     const connectClose = document.getElementById('connect-close');
@@ -214,10 +229,6 @@ const currentPath = Astro.url.pathname;
     
     if (connectBtn) {
       connectBtn.addEventListener('click', openConnectSidebar);
-    }
-    
-    if (connectBtnMobile) {
-      connectBtnMobile.addEventListener('click', openConnectSidebar);
     }
     
     if (connectClose) {

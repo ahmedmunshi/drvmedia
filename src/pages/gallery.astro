@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import ImageGrid from '../components/ImageGrid.astro';
 import Lightbox from '../components/Lightbox.astro';
 import { cloudinaryGalleryImages } from '../data/cloudinaryImages';
@@ -42,4 +43,6 @@ const seoKeywords = "DRVMedia gallery, DRV Media portfolio, automotive photograp
     <!-- Lightbox Component -->
     <Lightbox images={galleryImages} />
   </main>
+
+  <Footer />
 </Layout>

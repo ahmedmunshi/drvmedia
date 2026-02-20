@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Page Not Found - imlateonrent">
+<Layout title="Page Not Found - DRV Media">
   <Header />
   
   <main class="min-h-screen flex items-center justify-center">
@@ -11,7 +12,8 @@ import Header from '../components/Header.astro';
       <div class="max-w-md mx-auto">
         <div class="mb-8">
           <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 0a6 6 0 106 6m-6-6a6 6 0 016-6m-6 6h6"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
           </svg>
         </div>
         
@@ -24,7 +26,7 @@ import Header from '../components/Header.astro';
         <div class="space-y-4">
           <a 
             href="/" 
-            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 transition-colors"
+            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-accent-500 hover:bg-gray-900 transition-colors"
           >
             Go Home
           </a>
@@ -39,11 +41,13 @@ import Header from '../components/Header.astro';
               href="/about" 
               class="text-gray-600 hover:text-gray-900"
             >
-              About Me
+              About
             </a>
           </div>
         </div>
       </div>
     </div>
   </main>
+
+  <Footer />
 </Layout>
