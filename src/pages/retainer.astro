@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+
 
 const seoTitle = "DRV Media — Instagram Growth Retainer";
 const seoDescription = "DRV Media Instagram Growth Retainer package with monthly reel production, strategy, and optional ads management.";
@@ -14,14 +13,10 @@ const seoKeywords = "DRV Media retainer, Instagram growth, reel production, soci
   keywords={seoKeywords}
   ogImage="/newlogo-dark.png"
 >
-  <Header />
-
-  <main class="min-h-screen pt-24 pb-16">
+  <main class="min-h-screen pt-12 pb-16">
     <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8" id="retainer-print">
-      <div class="print-logo hidden text-center mb-6">
-        <img src="/mediaagency.png" alt="DRV Media" class="h-20 mx-auto" />
-      </div>
       <div class="text-center mb-10">
+        <img src="/mediaagency.png" alt="DRV Media" class="h-24 mx-auto mb-6" />
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-thin text-gray-900 tracking-wide" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.03em;">
           DRV Media — Instagram Growth Retainer
         </h1>
@@ -37,7 +32,7 @@ const seoKeywords = "DRV Media retainer, Instagram growth, reel production, soci
           Reel Production
         </h2>
         <p class="mt-3 text-lg text-gray-600" style="font-family: 'Poppins', sans-serif; font-weight: 300;">
-          8 Reels Per Month
+          8 Premium Reels Per Month
         </p>
       </div>
 
@@ -53,7 +48,7 @@ const seoKeywords = "DRV Media retainer, Instagram growth, reel production, soci
               4 Cinematic Showcase Reels
             </h3>
             <p class="text-gray-600" style="font-family: 'Poppins', sans-serif; font-weight: 300;">
-              Premium, brand-driven edits with elevated visuals and movement.
+              High-impact, brand-elevating edits designed to position the dealership as premium and authoritative within the market.
             </p>
           </div>
           <div>
@@ -61,7 +56,7 @@ const seoKeywords = "DRV Media retainer, Instagram growth, reel production, soci
               4 Dealer-Style Review Reels
             </h3>
             <p class="text-gray-600" style="font-family: 'Poppins', sans-serif; font-weight: 300;">
-              Feature-focused, sales-oriented content highlighting key specs and value.
+              Sales-driven walkthrough content focused on features, specifications, value and conversion.
             </p>
           </div>
         </div>
@@ -69,17 +64,33 @@ const seoKeywords = "DRV Media retainer, Instagram growth, reel production, soci
 
       <div class="border-t border-gray-200 my-8"></div>
 
-      <section class="mb-10">
-        <h2 class="text-xl sm:text-2xl font-thin text-gray-900 tracking-wide mb-6" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.03em;">
-          Strategy
-        </h2>
-        <ul class="space-y-3 text-gray-600" style="font-family: 'Poppins', sans-serif; font-weight: 300;">
-          <li>• Structured monthly content plan</li>
-          <li>• Brand positioning direction</li>
-          <li>• Hook optimisation for stronger retention</li>
-          <li>• Competitor observation & market alignment</li>
-        </ul>
-      </section>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <section>
+          <h2 class="text-xl sm:text-2xl font-thin text-gray-900 tracking-wide mb-6" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.03em;">
+            Strategy
+          </h2>
+          <ul class="space-y-3 text-gray-600" style="font-family: 'Poppins', sans-serif; font-weight: 300;">
+            <li>• Structured monthly content framework</li>
+            <li>• Brand positioning direction</li>
+            <li>• Hook optimisation for stronger retention</li>
+            <li>• Competitor observation & market alignment</li>
+            <li>• Performance-based content refinement</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-xl sm:text-2xl font-thin text-gray-900 tracking-wide mb-6" style="font-family: 'Poppins', sans-serif; font-weight: 200; letter-spacing: 0.03em;">
+            Publishing & Management
+          </h2>
+          <ul class="space-y-3 text-gray-600" style="font-family: 'Poppins', sans-serif; font-weight: 300;">
+            <li>• Content scheduling</li>
+            <li>• Caption structuring</li>
+            <li>• Hashtag optimisation</li>
+            <li>• Professional posting execution</li>
+            <li>• Feed consistency oversight</li>
+          </ul>
+        </section>
+      </div>
 
       <div class="border-t border-gray-200 my-8"></div>
 
@@ -92,7 +103,7 @@ const seoKeywords = "DRV Media retainer, Instagram growth, reel production, soci
             Instagram / Meta Ads Management — K7,500 / Month
           </p>
           <p>
-            Campaign setup, targeting, optimisation & performance summary.
+            Campaign architecture, targeting strategy, creative optimisation and performance reporting.
           </p>
           <p>
             Ad spend separate.
@@ -122,11 +133,43 @@ const seoKeywords = "DRV Media retainer, Instagram growth, reel production, soci
       }
 
       main {
-        padding-top: 1.5rem !important;
-        padding-bottom: 2rem !important;
+        padding-top: 1rem !important;
+        padding-bottom: 1.5rem !important;
+      }
+
+      #retainer-print .border-t {
+        margin: 0.75rem 0 !important;
+      }
+
+      #retainer-print .mb-10 {
+        margin-bottom: 1.25rem !important;
+      }
+
+      #retainer-print .mb-6 {
+        margin-bottom: 0.75rem !important;
+      }
+
+      #retainer-print .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 1rem !important;
+      }
+
+      #retainer-print h1 {
+        font-size: 2rem !important;
+        line-height: 2.4rem !important;
+      }
+
+      #retainer-print h2 {
+        font-size: 1.25rem !important;
+        line-height: 1.75rem !important;
+      }
+
+      #retainer-print p,
+      #retainer-print li {
+        font-size: 0.95rem !important;
+        line-height: 1.4rem !important;
       }
     }
   </style>
 
-  <Footer />
 </Layout>
